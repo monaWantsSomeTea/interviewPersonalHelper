@@ -1,0 +1,431 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		095AD3BF2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */; };
+		09A3D57F2AAD3F8A001B9B34 /* InterviewQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A3D57E2AAD3F8A001B9B34 /* InterviewQuestions.swift */; };
+		09A3D5822AAF8025001B9B34 /* QuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A3D5812AAF8025001B9B34 /* QuestionCard.swift */; };
+		09A3D5842AAF8318001B9B34 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A3D5832AAF8318001B9B34 /* UserResponse.swift */; };
+		09A3D5862AAF864F001B9B34 /* QuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A3D5852AAF864F001B9B34 /* QuestionView.swift */; };
+		09A3D5882AAF9B93001B9B34 /* UserResponseEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A3D5872AAF9B93001B9B34 /* UserResponseEditor.swift */; };
+		09A3D58A2AAFA004001B9B34 /* SaveOrCancelHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A3D5892AAFA004001B9B34 /* SaveOrCancelHeader.swift */; };
+		09DFB3692AAD3675007112E9 /* InterviewHelperPOCApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DFB3682AAD3675007112E9 /* InterviewHelperPOCApp.swift */; };
+		09DFB36B2AAD3675007112E9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DFB36A2AAD3675007112E9 /* ContentView.swift */; };
+		09DFB36D2AAD3677007112E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09DFB36C2AAD3677007112E9 /* Assets.xcassets */; };
+		09DFB3702AAD3677007112E9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09DFB36F2AAD3677007112E9 /* Preview Assets.xcassets */; };
+		09DFB3722AAD3677007112E9 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DFB3712AAD3677007112E9 /* Persistence.swift */; };
+		09DFB3752AAD3677007112E9 /* InterviewHelperPOC.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 09DFB3732AAD3677007112E9 /* InterviewHelperPOC.xcdatamodeld */; };
+		09DFB37D2AAD384C007112E9 /* InterviewQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DFB37C2AAD384C007112E9 /* InterviewQuestion.swift */; };
+		09DFB37F2AAD39E0007112E9 /* questions.json in Resources */ = {isa = PBXBuildFile; fileRef = 09DFB37E2AAD39E0007112E9 /* questions.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonQuestionsHeader.swift; sourceTree = "<group>"; };
+		09A3D57E2AAD3F8A001B9B34 /* InterviewQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterviewQuestions.swift; sourceTree = "<group>"; };
+		09A3D5812AAF8025001B9B34 /* QuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionCard.swift; sourceTree = "<group>"; };
+		09A3D5832AAF8318001B9B34 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
+		09A3D5852AAF864F001B9B34 /* QuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionView.swift; sourceTree = "<group>"; };
+		09A3D5872AAF9B93001B9B34 /* UserResponseEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseEditor.swift; sourceTree = "<group>"; };
+		09A3D5892AAFA004001B9B34 /* SaveOrCancelHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveOrCancelHeader.swift; sourceTree = "<group>"; };
+		09DFB3652AAD3675007112E9 /* InterviewHelperPOC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InterviewHelperPOC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		09DFB3682AAD3675007112E9 /* InterviewHelperPOCApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterviewHelperPOCApp.swift; sourceTree = "<group>"; };
+		09DFB36A2AAD3675007112E9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		09DFB36C2AAD3677007112E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		09DFB36F2AAD3677007112E9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		09DFB3712AAD3677007112E9 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		09DFB3742AAD3677007112E9 /* InterviewHelperPOC.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InterviewHelperPOC.xcdatamodel; sourceTree = "<group>"; };
+		09DFB37C2AAD384C007112E9 /* InterviewQuestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterviewQuestion.swift; sourceTree = "<group>"; };
+		09DFB37E2AAD39E0007112E9 /* questions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = questions.json; path = InterviewHelperPOC/Models/questions.json; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		09DFB3622AAD3675007112E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		095AD3BD2ABA2EB5003E1E8C /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		095AD3C02ABA2F2E003E1E8C /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				09A3D5892AAFA004001B9B34 /* SaveOrCancelHeader.swift */,
+				09A3D5872AAF9B93001B9B34 /* UserResponseEditor.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		09A3D5802AAF800E001B9B34 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				095AD3C02ABA2F2E003E1E8C /* Editor */,
+				095AD3BD2ABA2EB5003E1E8C /* Home */,
+				09A3D5812AAF8025001B9B34 /* QuestionCard.swift */,
+				09A3D5852AAF864F001B9B34 /* QuestionView.swift */,
+				09A3D5832AAF8318001B9B34 /* UserResponse.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		09DFB35C2AAD3675007112E9 = {
+			isa = PBXGroup;
+			children = (
+				09DFB3672AAD3675007112E9 /* InterviewHelperPOC */,
+				09DFB3662AAD3675007112E9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		09DFB3662AAD3675007112E9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				09DFB3652AAD3675007112E9 /* InterviewHelperPOC.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		09DFB3672AAD3675007112E9 /* InterviewHelperPOC */ = {
+			isa = PBXGroup;
+			children = (
+				09A3D5802AAF800E001B9B34 /* Views */,
+				09DFB37B2AAD3836007112E9 /* Models */,
+				09DFB3682AAD3675007112E9 /* InterviewHelperPOCApp.swift */,
+				09DFB36A2AAD3675007112E9 /* ContentView.swift */,
+				09DFB36C2AAD3677007112E9 /* Assets.xcassets */,
+				09DFB3712AAD3677007112E9 /* Persistence.swift */,
+				09DFB3732AAD3677007112E9 /* InterviewHelperPOC.xcdatamodeld */,
+				09DFB36E2AAD3677007112E9 /* Preview Content */,
+			);
+			path = InterviewHelperPOC;
+			sourceTree = "<group>";
+		};
+		09DFB36E2AAD3677007112E9 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				09DFB36F2AAD3677007112E9 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		09DFB37B2AAD3836007112E9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				09A3D57E2AAD3F8A001B9B34 /* InterviewQuestions.swift */,
+				09DFB37E2AAD39E0007112E9 /* questions.json */,
+				09DFB37C2AAD384C007112E9 /* InterviewQuestion.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		09DFB3642AAD3675007112E9 /* InterviewHelperPOC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 09DFB3782AAD3677007112E9 /* Build configuration list for PBXNativeTarget "InterviewHelperPOC" */;
+			buildPhases = (
+				09DFB3612AAD3675007112E9 /* Sources */,
+				09DFB3622AAD3675007112E9 /* Frameworks */,
+				09DFB3632AAD3675007112E9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = InterviewHelperPOC;
+			productName = InterviewHelperPOC;
+			productReference = 09DFB3652AAD3675007112E9 /* InterviewHelperPOC.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		09DFB35D2AAD3675007112E9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					09DFB3642AAD3675007112E9 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+				};
+			};
+			buildConfigurationList = 09DFB3602AAD3675007112E9 /* Build configuration list for PBXProject "InterviewHelperPOC" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 09DFB35C2AAD3675007112E9;
+			productRefGroup = 09DFB3662AAD3675007112E9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				09DFB3642AAD3675007112E9 /* InterviewHelperPOC */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		09DFB3632AAD3675007112E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09DFB3702AAD3677007112E9 /* Preview Assets.xcassets in Resources */,
+				09DFB37F2AAD39E0007112E9 /* questions.json in Resources */,
+				09DFB36D2AAD3677007112E9 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		09DFB3612AAD3675007112E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09A3D5882AAF9B93001B9B34 /* UserResponseEditor.swift in Sources */,
+				09DFB3722AAD3677007112E9 /* Persistence.swift in Sources */,
+				09A3D57F2AAD3F8A001B9B34 /* InterviewQuestions.swift in Sources */,
+				095AD3BF2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift in Sources */,
+				09A3D58A2AAFA004001B9B34 /* SaveOrCancelHeader.swift in Sources */,
+				09DFB37D2AAD384C007112E9 /* InterviewQuestion.swift in Sources */,
+				09A3D5842AAF8318001B9B34 /* UserResponse.swift in Sources */,
+				09DFB36B2AAD3675007112E9 /* ContentView.swift in Sources */,
+				09A3D5822AAF8025001B9B34 /* QuestionCard.swift in Sources */,
+				09DFB3752AAD3677007112E9 /* InterviewHelperPOC.xcdatamodeld in Sources */,
+				09A3D5862AAF864F001B9B34 /* QuestionView.swift in Sources */,
+				09DFB3692AAD3675007112E9 /* InterviewHelperPOCApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		09DFB3762AAD3677007112E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		09DFB3772AAD3677007112E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		09DFB3792AAD3677007112E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"InterviewHelperPOC/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.monaWantsTea.InterviewHelperPOC;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		09DFB37A2AAD3677007112E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"InterviewHelperPOC/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.monaWantsTea.InterviewHelperPOC;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		09DFB3602AAD3675007112E9 /* Build configuration list for PBXProject "InterviewHelperPOC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09DFB3762AAD3677007112E9 /* Debug */,
+				09DFB3772AAD3677007112E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		09DFB3782AAD3677007112E9 /* Build configuration list for PBXNativeTarget "InterviewHelperPOC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09DFB3792AAD3677007112E9 /* Debug */,
+				09DFB37A2AAD3677007112E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		09DFB3732AAD3677007112E9 /* InterviewHelperPOC.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				09DFB3742AAD3677007112E9 /* InterviewHelperPOC.xcdatamodel */,
+			);
+			currentVersion = 09DFB3742AAD3677007112E9 /* InterviewHelperPOC.xcdatamodel */;
+			path = InterviewHelperPOC.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 09DFB35D2AAD3675007112E9 /* Project object */;
+}
