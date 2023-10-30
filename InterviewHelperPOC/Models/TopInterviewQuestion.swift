@@ -7,9 +7,13 @@
 
 import Foundation
 
-struct InterviewQuestion: Codable, Identifiable {
-    let id: Int // could use UUID instead
-    let details: String
+//protocol Item {
+//    var prompt: String { get set }
+//}
+
+struct TopInterviewQuestion: Decodable, Identifiable {
+    let id: Int
+    var prompt: String
     
     enum CodeKeys: Swift.CodingKey {
         case id
@@ -19,7 +23,6 @@ struct InterviewQuestion: Codable, Identifiable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodeKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
-        self.details = try container.decode(String.self, forKey: .question)
+        self.prompt = try container.decode(String.self, forKey: .question)
     }
-    
 }

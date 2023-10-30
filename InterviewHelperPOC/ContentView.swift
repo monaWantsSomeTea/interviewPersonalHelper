@@ -11,36 +11,61 @@ import CoreData
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \PromptItem.identifier, ascending: true)],
         animation: .default)
     
-    private var items: FetchedResults<Item>
-    let interviewQuestions: [InterviewQuestion] = InterviewQuestions().questions
+    private var items: FetchedResults<PromptItem>
+    
+    @State var topInterviewQuestions: [PromptItem] = TopInterviewQuestions().asPromptItems()
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading) {
                     CommonQuestionsHeader()
                     LazyVStack {
-                        ForEach(interviewQuestions, id: \.id) { question in
-                            NavigationLink(destination: QuestionView(question: question)) {
+                        ForEach(Array(self.$topInterviewQuestions.enumerated()), id: \.offset) { (_, question) in
+                            NavigationLink(
+                                destination: PromptAndResponseView(question: question)
+                                    .environment(\.managedObjectContext, viewContext)
+                            ) {
                                 VStack {
                                     HStack {
-                                        Text(question.details)
+                                        Text(question.prompt.wrappedValue)
                                             .multilineTextAlignment(.leading)
-        
+
                                         Spacer()
                                         Image(systemName: "chevron.forward")
                                     }
                                     .foregroundColor(.black)
                                     .padding([.horizontal])
                                     .padding([.vertical], 4)
-                                    
+
                                     Divider()
                                 }
                             }
                         }
                     }
+                }
+            }
+        }
+        .onChange(of: Array(self.items)) { newItems in
+            for item in newItems {
+                guard item.originialCategory == "top-interview-question",
+                      let stringId = item.originalId,
+                      let integerId = Int(stringId),
+                      integerId > 0,
+                      integerId <= topInterviewQuestions.count
+                else { continue }
+                
+                // The items list starts with an id that starts with "1"
+                let index = integerId - 1
+                self.topInterviewQuestions[index] = item
+            }
+        }
+    }
+}
+
 //                    .alignmentGuide(.listRowSeparatorTrailing) { vd in
 //                        return vd[.listRowSeparatorTrailing]
 
@@ -49,11 +74,6 @@ struct ContentView: View {
 //
 //                    }
 //                    .listStyle(.plain)
-                }
-            }
-        }
-    }
-}
 
 //    private func addItem() {
 //        withAnimation {

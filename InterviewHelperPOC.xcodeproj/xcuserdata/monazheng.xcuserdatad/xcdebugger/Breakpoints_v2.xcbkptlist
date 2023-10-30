@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "E1C6E3AF-2BFC-45B7-BE77-E711CDC0354C"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B5244369-607F-4800-B4A8-9233EB176111"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "InterviewHelperPOC/Views/ResponseViews/UserResponse.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "B5244369-607F-4800-B4A8-9233EB176111 - 52924ff027c8176a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "InterviewHelperPOC.ResponseSection.body.getter : some"
+                  moduleName = "InterviewHelperPOC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/monazheng/Desktop/Personal%20Projects/InterviewHelperPOC/InterviewHelperPOC/Views/ResponseViews/UserResponse.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "50"
+                  endingLineNumber = "50"
+                  offsetFromSymbolStart = "404">
+               </Location>
+               <Location
+                  uuid = "B5244369-607F-4800-B4A8-9233EB176111 - 52924ff027c8172c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "InterviewHelperPOC.ResponseSection.body.getter : some"
+                  moduleName = "InterviewHelperPOC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/monazheng/Desktop/Personal%20Projects/InterviewHelperPOC/InterviewHelperPOC/Views/ResponseViews/UserResponse.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4EEC802D-FE72-4C65-82C2-470B96EB4B7A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "InterviewHelperPOC/Views/ResponseViews/UserResponse.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
