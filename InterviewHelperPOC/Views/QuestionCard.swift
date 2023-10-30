@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct QuestionCard: View {
-    var detail: String
+    var question: Item
     var body: some View {
             RoundedRectangle(cornerRadius: 12)
                 .foregroundColor(.white)
@@ -16,7 +16,7 @@ struct QuestionCard: View {
                 .frame(minWidth: 300)
                 .frame(minHeight: 150)
                 .overlay {
-                    Text(self.detail)
+                    Text(self.question.prompt)
                         .padding()
                         .multilineTextAlignment(.center)
                     
@@ -26,6 +26,6 @@ struct QuestionCard: View {
 
 struct QuestionCard_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionCard(detail: "Hello, world!")
+        QuestionCard(question: TopInterviewQuestions().questions[0])
     }
 }
