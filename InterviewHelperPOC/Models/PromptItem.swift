@@ -23,10 +23,5 @@ public class PromptItem: NSManagedObject, Item {
     /// The prompt for the user to respond to.
     @NSManaged public var prompt: String
     /// The response that the user inputted.
-    @NSManaged public var response: String
+    @NSManaged public var response: String?
 }
-
-
-//public enum PromptCategory: String, Codable, Equatable, NSCoding {
-//    case interview
-//}

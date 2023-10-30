@@ -9,11 +9,13 @@ import Foundation
 
 protocol Item {
     var prompt: String { get set }
+    var response: String? { get set }
 }
 
 struct TopInterviewQuestion: Decodable, Identifiable, Item {
     let id: Int
     var prompt: String
+    var response: String?
     
     enum CodeKeys: Swift.CodingKey {
         case id
@@ -24,5 +26,7 @@ struct TopInterviewQuestion: Decodable, Identifiable, Item {
         let container = try decoder.container(keyedBy: CodeKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
         self.prompt = try container.decode(String.self, forKey: .question)
+        
+        self.response = nil
     }
 }

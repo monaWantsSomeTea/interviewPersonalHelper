@@ -84,9 +84,9 @@ extension SaveOrCancelResponseHeader {
 //            }
 
             
-            let fetchRequest = PromptItem.fetchRequest()
+            let fetchRequestToShow = PromptItem.fetchRequest()
             do {
-                let promptItems = try viewContext.fetch(fetchRequest)
+                let promptItems = try viewContext.fetch(fetchRequestToShow)
                 for promptItem in promptItems {
                     print("Fetched PromptItem with prompt: \(promptItem.prompt)")
                     print("Response: \(promptItem.response)")

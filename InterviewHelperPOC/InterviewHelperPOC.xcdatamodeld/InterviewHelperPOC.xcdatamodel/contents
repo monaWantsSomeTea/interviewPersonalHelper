@@ -5,6 +5,6 @@
         <attribute name="originalId" optional="YES" attributeType="String"/>
         <attribute name="originialCategory" optional="YES" attributeType="String"/>
         <attribute name="prompt" attributeType="String"/>
-        <attribute name="response" attributeType="String"/>
+        <attribute name="response" optional="YES" attributeType="String"/>
     </entity>
 </model>

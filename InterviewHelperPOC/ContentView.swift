@@ -49,6 +49,25 @@ struct ContentView: View {
                 }
             }
         }
+        .onAppear {
+            for item in self.items {
+                guard item.originialCategory == "top-interview-question",
+                      let stringId = item.originalId,
+                      let integerId = Int(stringId),
+                      integerId > 0,
+                      integerId <= topInterviewQuestions.count
+                else { continue }
+                
+                
+                // The items list starts with an id that starts with "1"
+                let index = integerId - 1
+                
+                print("The saved item:", item.identifier, item.response)
+                print("Original item:", self.topInterviewQuestions[index].response)
+        
+                self.topInterviewQuestions[index] = item
+            }
+        }
         .onChange(of: Array(self.items)) { newItems in
             for item in newItems {
                 guard item.originialCategory == "top-interview-question",
@@ -58,8 +77,13 @@ struct ContentView: View {
                       integerId <= topInterviewQuestions.count
                 else { continue }
                 
+                
                 // The items list starts with an id that starts with "1"
                 let index = integerId - 1
+                
+                print("The saved item:", item.identifier, item.response)
+                print("Original item:", self.topInterviewQuestions[index].response)
+        
                 self.topInterviewQuestions[index] = item
             }
         }
