@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct QuestionCard: View {
-    var question: Item
+    var question: PromptItemViewModel
     var body: some View {
             RoundedRectangle(cornerRadius: 12)
                 .foregroundColor(.white)

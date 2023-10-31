@@ -11,7 +11,7 @@ struct UserResponseEditor: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State var inputResponse: String
     
-    @Binding var question: Item
+    @Binding var question: PromptItemViewModel
     @Binding var response: String
     
     var body: some View {
@@ -34,7 +34,7 @@ struct UserResponseEditor: View {
         .navigationTitle("Edit Response")
     }
     
-    init(question: Binding<Item>, response: Binding<String>) {
+    init(question: Binding<PromptItemViewModel>, response: Binding<String>) {
         self._question = question
         self._response = response
         self._inputResponse = State(initialValue: response.wrappedValue)

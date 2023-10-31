@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PromptAndResponseView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Binding var question: Item
+    @Binding var question: PromptItemViewModel
     
     var body: some View {
         self.content
@@ -30,7 +30,7 @@ struct PromptAndResponseView: View {
         }
     }
     
-    init(question: Binding<Item>) {
+    init(question: Binding<PromptItemViewModel>) {
         self._question = question
     }
 }

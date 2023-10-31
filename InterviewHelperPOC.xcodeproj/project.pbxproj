@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		091D676E2AF084DD00188A23 /* PromptItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091D676D2AF084DD00188A23 /* PromptItemViewModel.swift */; };
 		095AD3BF2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */; };
 		0986A5682AEB1FCA00862D8D /* PromptItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0986A5672AEB1FCA00862D8D /* PromptItem.swift */; };
 		09A3D57F2AAD3F8A001B9B34 /* TopInterviewQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A3D57E2AAD3F8A001B9B34 /* TopInterviewQuestions.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		091D676D2AF084DD00188A23 /* PromptItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptItemViewModel.swift; sourceTree = "<group>"; };
 		095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonQuestionsHeader.swift; sourceTree = "<group>"; };
 		0986A5672AEB1FCA00862D8D /* PromptItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptItem.swift; sourceTree = "<group>"; };
 		09A3D57E2AAD3F8A001B9B34 /* TopInterviewQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopInterviewQuestions.swift; sourceTree = "<group>"; };
@@ -56,6 +58,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		091D676C2AF084C300188A23 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				091D676D2AF084DD00188A23 /* PromptItemViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		095AD3BD2ABA2EB5003E1E8C /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +114,7 @@
 		09DFB3672AAD3675007112E9 /* InterviewHelperPOC */ = {
 			isa = PBXGroup;
 			children = (
+				091D676C2AF084C300188A23 /* ViewModels */,
 				09A3D5802AAF800E001B9B34 /* Views */,
 				09DFB37B2AAD3836007112E9 /* Models */,
 				09DFB3682AAD3675007112E9 /* InterviewHelperPOCApp.swift */,
@@ -217,6 +228,7 @@
 				09DFB36B2AAD3675007112E9 /* ContentView.swift in Sources */,
 				09A3D5822AAF8025001B9B34 /* QuestionCard.swift in Sources */,
 				09DFB3752AAD3677007112E9 /* InterviewHelperPOC.xcdatamodeld in Sources */,
+				091D676E2AF084DD00188A23 /* PromptItemViewModel.swift in Sources */,
 				09A3D5862AAF864F001B9B34 /* PromptAndResponseView.swift in Sources */,
 				09DFB3692AAD3675007112E9 /* InterviewHelperPOCApp.swift in Sources */,
 			);

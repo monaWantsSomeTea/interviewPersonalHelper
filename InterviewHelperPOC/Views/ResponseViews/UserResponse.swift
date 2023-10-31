@@ -11,7 +11,7 @@ import CoreData
 struct UserResponse: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State var currentResponse: String
-    @Binding var question: Item
+    @Binding var question: PromptItemViewModel
     
     var body: some View {
         NavigationLink(
@@ -25,13 +25,6 @@ struct UserResponse: View {
                 .multilineTextAlignment(.leading)
                 .disabled(true)
         }
-//        .onChange(of: self.$question.response.wrappedValue) { newResponse in // no onchange for binding
-//            if let newResponse {
-//                self.$response.wrappedValue = newResponse
-//            } else {
-//                self.$response.wrappedValue = "Add your answer, notes or bullet points"
-//            }
-//        }
         .onAppear {
             guard let storedResponse = self.question.response else {
                 self.$currentResponse.wrappedValue = "Add your answer, notes or bullet points"
@@ -44,11 +37,11 @@ struct UserResponse: View {
         }
     }
     
-    init(question: Binding<Item>) {
+    init(question: Binding<PromptItemViewModel>) {
         self._question = question
         self._currentResponse = State(initialValue: "Add your answer, notes or bullet points")
         
-        if let promptItem = question.wrappedValue as? PromptItem,
+        if let promptItem = question.model.wrappedValue as? PromptItem,
            let response = promptItem.response {
             self._currentResponse.wrappedValue = response
         }
@@ -57,7 +50,7 @@ struct UserResponse: View {
 
 struct ResponseSection: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Binding var question: Item
+    @Binding var question: PromptItemViewModel
     
     var body: some View {
         UserResponse(question: self.$question)
@@ -66,19 +59,19 @@ struct ResponseSection: View {
     }
 }
 
-struct UserResponse_Previews: PreviewProvider {
-    static var previews: some View {
-        ResponseSection(question:
-            Binding(
-                get: {
-                    TopInterviewQuestions().questions[0]
-                },
-                set: { newValue in
-                    // Handle the case where you want to update the selected question
-//                    newValue
-                }
-            )
-        )
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
-}
+//struct UserResponse_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ResponseSection(question:
+//            Binding(
+//                get: {
+//                    TopInterviewQuestions().questions[0]
+//                },
+//                set: { newValue in
+//                    // Handle the case where you want to update the selected question
+////                    newValue
+//                }
+//            )
+//        )
+//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//    }
+//}

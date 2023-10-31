@@ -16,7 +16,7 @@ struct ContentView: View {
     
     private var items: FetchedResults<PromptItem>
     
-    @State var topInterviewQuestions: [Item] = TopInterviewQuestions().questions
+    @State var topInterviewQuestions: [PromptItemViewModel] = TopInterviewQuestions().questions
     
     var body: some View {
         NavigationView {
@@ -61,11 +61,7 @@ struct ContentView: View {
                 
                 // The items list starts with an id that starts with "1"
                 let index = integerId - 1
-                
-                print("The saved item:", item.identifier, item.response)
-                print("Original item:", self.topInterviewQuestions[index].response)
-        
-                self.topInterviewQuestions[index] = item
+                self.topInterviewQuestions[index] = PromptItemViewModel(model: item)
             }
         }
         .onChange(of: Array(self.items)) { newItems in
@@ -80,11 +76,7 @@ struct ContentView: View {
                 
                 // The items list starts with an id that starts with "1"
                 let index = integerId - 1
-                
-                print("The saved item:", item.identifier, item.response)
-                print("Original item:", self.topInterviewQuestions[index].response)
-        
-                self.topInterviewQuestions[index] = item
+                self.topInterviewQuestions[index] = PromptItemViewModel(model: item)
             }
         }
     }

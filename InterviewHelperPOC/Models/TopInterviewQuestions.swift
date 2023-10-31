@@ -8,7 +8,7 @@
 import Foundation
 
 class TopInterviewQuestions {
-    private(set) var questions: [TopInterviewQuestion] = []
+    private(set) var questions: [PromptItemViewModel] = []
     
     private func makeQuestions() -> [TopInterviewQuestion] {
         guard let json = Bundle.main.url(forResource: "questions", withExtension: ".json") else {
@@ -24,6 +24,6 @@ class TopInterviewQuestions {
     }
     
     init() {
-        self.questions = self.makeQuestions()
+        self.questions = self.makeQuestions().map { PromptItemViewModel(model: $0) }
     }
 }
