@@ -55,7 +55,6 @@ extension SaveOrCancelResponseHeader {
             // The old prompt item properties are assigned to the new prompt item.
             // Then we delete the old prompt item.
             // This is so that the `onChange` will detect the changes of CoreData for the PromptItems.
-            // - Comment: We can implement a notification system in the future instead.
             newPromptItem.identifier = promptItem.identifier
             newPromptItem.originialCategory = promptItem.originialCategory
             newPromptItem.originalId = promptItem.originalId
