@@ -10,12 +10,13 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \PromptItem.identifier, ascending: true)],
-        animation: .default)
+    @FetchRequest(sortDescriptors: [], animation: .default)
     
-    private var items: FetchedResults<PromptItem>
+    /// PromptItems data recieved from Core Data.
+    private var fetchedPromptItems: FetchedResults<PromptItem>
+    private var promptItems: [PromptItem] { Array(self.fetchedPromptItems) }
     
+    /// List of top interview questions.
     @State var topInterviewQuestions: [PromptItemViewModel] = TopInterviewQuestions().questions
     
     var body: some View {
@@ -50,34 +51,25 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            for item in self.items {
-                guard item.originialCategory == "top-interview-question",
-                      let stringId = item.originalId,
-                      let integerId = Int(stringId),
-                      integerId > 0,
-                      integerId <= topInterviewQuestions.count
-                else { continue }
-                
-                
-                // The items list starts with an id that starts with "1"
-                let index = integerId - 1
-                self.topInterviewQuestions[index] = PromptItemViewModel(model: item)
-            }
+            self.replaceTopInterviewQuestions(with: self.promptItems)
         }
-        .onChange(of: Array(self.items)) { newItems in
-            for item in newItems {
-                guard item.originialCategory == "top-interview-question",
-                      let stringId = item.originalId,
-                      let integerId = Int(stringId),
-                      integerId > 0,
-                      integerId <= topInterviewQuestions.count
-                else { continue }
-                
-                
-                // The items list starts with an id that starts with "1"
-                let index = integerId - 1
-                self.topInterviewQuestions[index] = PromptItemViewModel(model: item)
-            }
+        .onChange(of: self.promptItems) { newPromptItems in
+            self.replaceTopInterviewQuestions(with: newPromptItems)
+        }
+    }
+    
+    private func replaceTopInterviewQuestions(with promptItems: [PromptItem]) {
+        for item in promptItems {
+            guard item.originialCategory == "top-interview-question",
+                  let stringId = item.originalId,
+                  let integerId = Int(stringId),
+                  integerId > 0,
+                  integerId <= topInterviewQuestions.count
+            else { continue }
+            
+            // The items list starts with an id that starts with "1"
+            let index = integerId - 1
+            self.topInterviewQuestions[index] = PromptItemViewModel(model: item)
         }
     }
 }

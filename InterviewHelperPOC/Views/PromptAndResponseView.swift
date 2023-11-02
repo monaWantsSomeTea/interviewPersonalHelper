@@ -22,7 +22,7 @@ struct PromptAndResponseView: View {
                 QuestionCard(question: self.question)
                     .padding()
                     .frame(height: proxy.size.height * 0.35)
-                ResponseSection(question: self.$question)
+                ResponseSectionView(question: self.$question)
                     .environment(\.managedObjectContext, viewContext)
                 
             }
@@ -35,9 +35,14 @@ struct PromptAndResponseView: View {
     }
 }
 
-//struct QuestionView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PromptAndResponseView(question: TopInterviewQuestions().questions[0])
-//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//    }
-//}
+struct QuestionView_Previews: PreviewProvider {
+    static var previews: some View {
+        PromptAndResponseView(question:
+            Binding(
+                get: { TopInterviewQuestions().questions[0] },
+                set: { _ in }
+            )
+        )
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}

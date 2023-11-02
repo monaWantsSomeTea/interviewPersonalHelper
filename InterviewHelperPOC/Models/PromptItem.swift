@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 @objc(PromptItem)
-public class PromptItem: NSManagedObject, Item {
+public class PromptItem: NSManagedObject, GenericPromptItem {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<PromptItem> {
         return NSFetchRequest<PromptItem>(entityName: "PromptItem")
     }

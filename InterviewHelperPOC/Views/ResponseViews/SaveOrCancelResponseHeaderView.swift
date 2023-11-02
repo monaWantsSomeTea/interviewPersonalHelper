@@ -1,5 +1,5 @@
 //
-//  SaveOrCancelHeader.swift
+//  SaveOrCancelResponseHeaderView.swift
 //  InterviewHelperPOC
 //
 //  Created by Mona Zheng on 9/11/23.
@@ -8,12 +8,13 @@
 import SwiftUI
 import CoreData
 
-struct SaveOrCancelResponseHeader: View {
+struct SaveOrCancelResponseHeaderView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
+    /// Input from the user
     @Binding var inputResponse: String
+    /// Contains the prompt item data
     @Binding var question: PromptItemViewModel
-    @Binding var response: String
     
     var body: some View {
         HStack {
@@ -39,15 +40,14 @@ struct SaveOrCancelResponseHeader: View {
                         Capsule(style: .continuous)
                             .stroke(Color.black)
                     }
-                
             }
         }
     }
 }
 
-extension SaveOrCancelResponseHeader {
-    // Save to Core Data
-    func save(_ inputResponse: Binding<String>, to question: Binding<PromptItemViewModel>) {
+extension SaveOrCancelResponseHeaderView {
+    /// Save to Core Data
+    private func save(_ inputResponse: Binding<String>, to question: Binding<PromptItemViewModel>) {
         let newPromptItem = PromptItem(context: self.viewContext)
         
         switch $question.model.wrappedValue {
@@ -98,18 +98,26 @@ extension SaveOrCancelResponseHeader {
 //            }
             
         } catch let error as NSError {
+            // TODO: Make a toast or alert
             print("Could not save. \(error), \(error.userInfo)")
         }
     }
     
-    func cancel() {
-        self.inputResponse = self.response
+    private func cancel() {
+        self.inputResponse = self.question.response
     }
 }
 
-//struct SaveOrCancelHeader_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SaveOrCancelResponseHeader(response: .constant("Hello"), inputResponse: .constant("Not Hello"))
-//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//    }
-//}
+struct SaveOrCancelHeader_Previews: PreviewProvider {
+    static var previews: some View {
+        SaveOrCancelResponseHeaderView(
+            inputResponse: .constant("Not Hello"),
+            question:
+                Binding(
+                    get: { TopInterviewQuestions().questions[0] },
+                    set: { _ in }
+                )
+        )
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}

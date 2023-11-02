@@ -8,8 +8,8 @@
 import Foundation
 
 class PromptItemViewModel {
-    ///
-    var model: Item
+    /// Protocol for prompt item models
+    var model: GenericPromptItem
     /// Id of the item that was assigned from the downloaded content
     var originalId: String?
     /// The original category the item was from, ex: "top-interview-questions"
@@ -19,13 +19,18 @@ class PromptItemViewModel {
     /// The prompt for the user to respond to.
     var prompt: String
     /// The response that the user inputted.
-    var response: String?
+    var response: String
     
-    init(model: Item) {
+    init(model: GenericPromptItem) {
         self.model = model
         
         self.prompt = model.prompt
-        self.response = model.response
+        
+        if let response = model.response, !response.isEmpty {
+            self.response = response
+        } else {
+            self.response = "Add your answer, notes or bullet points"
+        }
         
         switch model {
         case let promptItem as PromptItem:

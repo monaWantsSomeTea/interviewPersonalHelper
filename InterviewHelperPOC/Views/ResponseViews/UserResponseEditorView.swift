@@ -1,5 +1,5 @@
 //
-//  UserResponseEditor.swift
+//  UserResponseEditorView.swift
 //  InterviewHelperPOC
 //
 //  Created by Mona Zheng on 9/11/23.
@@ -7,12 +7,11 @@
 
 import SwiftUI
 
-struct UserResponseEditor: View {
+struct UserResponseEditorView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @State var inputResponse: String
     
+    @State var inputResponse: String
     @Binding var question: PromptItemViewModel
-    @Binding var response: String
     
     var body: some View {
         VStack {
@@ -21,38 +20,33 @@ struct UserResponseEditor: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-        
             TextEditor(text: self.$inputResponse)
                 .shadow(color: .brown, radius: 2)
                 .fontWeight(.semibold)
                 .foregroundColor(Color(.darkGray))
+            
             Spacer(minLength: 20)
-            SaveOrCancelResponseHeader(inputResponse: self.$inputResponse, question: self.$question, response: self.$response)
+            
+            SaveOrCancelResponseHeaderView(inputResponse: self.$inputResponse, question: self.$question)
                 .environment(\.managedObjectContext, viewContext)
         }
         .padding()
         .navigationTitle("Edit Response")
     }
     
-    init(question: Binding<PromptItemViewModel>, response: Binding<String>) {
+    init(question: Binding<PromptItemViewModel>) {
         self._question = question
-        self._response = response
-        self._inputResponse = State(initialValue: response.wrappedValue)
+        self._inputResponse = State(initialValue: question.response.wrappedValue)
     }
 }
 
-struct UserResponseEditor_Previews: PreviewProvider {
+struct UserResponseEditorView_Previews: PreviewProvider {
     static var previews: some View {
-        UserResponseEditor(question:
+        UserResponseEditorView(question:
             Binding(
-                get: {
-                    TopInterviewQuestions().questions[0]
-                },
-                set: { newValue in
-                    // Handle the case where you want to update the selected question
-//                    newValue
-                }
-            ), response: .constant("Add some stuff here first")
+                get: { TopInterviewQuestions().questions[0] },
+                set: { _ in }
+            )
         )
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
