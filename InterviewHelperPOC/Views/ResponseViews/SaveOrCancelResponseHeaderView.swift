@@ -5,8 +5,8 @@
 //  Created by Mona Zheng on 9/11/23.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct SaveOrCancelResponseHeaderView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -74,29 +74,6 @@ extension SaveOrCancelResponseHeaderView {
 
         do {
             try self.viewContext.save()
-            print("Saved successfully")
-            
-//            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "PromptItem")
-//            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-//
-//            do {
-//                try viewContext.execute(batchDeleteRequest)
-//            } catch {
-//                print("Error deleting entities: \(error)")
-//            }
-
-            
-//            let fetchRequestToShow = PromptItem.fetchRequest()
-//            do {
-//                let promptItems = try viewContext.fetch(fetchRequestToShow)
-//                for promptItem in promptItems {
-//                    print("Fetched PromptItem with prompt: \(promptItem.prompt)")
-//                    print("Response: \(promptItem.response)")
-//                }
-//            } catch {
-//                print("Error fetching PromptItem: \(error)")
-//            }
-            
         } catch let error as NSError {
             // TODO: Make a toast or alert
             print("Could not save. \(error), \(error.userInfo)")
