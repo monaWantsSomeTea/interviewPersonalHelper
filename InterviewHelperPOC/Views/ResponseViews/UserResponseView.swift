@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+private let kResponseInputViewShadowRadius: CGFloat = 2
+
 struct UserResponseView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Binding var question: PromptItemViewModel
@@ -17,7 +19,7 @@ struct UserResponseView: View {
                 .environment(\.managedObjectContext, viewContext)
         ) {
             TextEditor(text: self.$question.response)
-                .shadow(color: .brown, radius: 2)
+                .shadow(color: .brown, radius: kResponseInputViewShadowRadius)
                 .fontWeight(.semibold)
                 .foregroundColor(Color(.darkGray))
                 .multilineTextAlignment(.leading)

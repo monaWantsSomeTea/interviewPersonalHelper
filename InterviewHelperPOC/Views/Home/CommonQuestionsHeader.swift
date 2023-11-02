@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+private let kHeaderLabelPadding: CGFloat = 16
+
 struct CommonQuestionsHeader: View {
     var body: some View {
         VStack(alignment: .leading) {
@@ -14,7 +16,7 @@ struct CommonQuestionsHeader: View {
                 Text("Top interview questions")
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .padding([.leading, .trailing, .top], 16)
+                    .padding([.leading, .trailing, .top], kHeaderLabelPadding)
             }
         }
     }

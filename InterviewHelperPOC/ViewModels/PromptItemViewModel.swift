@@ -7,6 +7,9 @@
 
 import Foundation
 
+private let kTopInterviewQuestionCategory: String = "top-interview-question"
+private let kEmptyOrNilResponseText: String = "Add your answer, notes or bullet points"
+
 class PromptItemViewModel {
     /// Protocol for prompt item models
     var model: GenericPromptItem
@@ -23,13 +26,12 @@ class PromptItemViewModel {
     
     init(model: GenericPromptItem) {
         self.model = model
-        
         self.prompt = model.prompt
         
         if let response = model.response, !response.isEmpty {
             self.response = response
         } else {
-            self.response = "Add your answer, notes or bullet points"
+            self.response = kEmptyOrNilResponseText
         }
         
         switch model {
@@ -39,7 +41,7 @@ class PromptItemViewModel {
             self.identifier = promptItem.identifier
         case let topInterviewQuestion as TopInterviewQuestion:
             self.originalId = String(topInterviewQuestion.id)
-            self.originialCategory = "top-interview-question"
+            self.originialCategory = kTopInterviewQuestionCategory
             self.identifier = nil
         default:
             fatalError("Unsupported type")

@@ -8,6 +8,10 @@
 import CoreData
 import SwiftUI
 
+private let kQuestionsListVerticalPadding: CGFloat = 4
+private let kTopInterviewQuestionCategory: String = "top-interview-question"
+private let kChevronForwardName: String = "chevron.forward"
+
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(sortDescriptors: [], animation: .default)
@@ -36,11 +40,11 @@ struct ContentView: View {
                                             .multilineTextAlignment(.leading)
 
                                         Spacer()
-                                        Image(systemName: "chevron.forward")
+                                        Image(systemName: kChevronForwardName)
                                     }
                                     .foregroundColor(.black)
                                     .padding([.horizontal])
-                                    .padding([.vertical], 4)
+                                    .padding([.vertical], kQuestionsListVerticalPadding)
 
                                     Divider()
                                 }
@@ -60,7 +64,7 @@ struct ContentView: View {
     
     private func replaceTopInterviewQuestions(with promptItems: [PromptItem]) {
         for item in promptItems {
-            guard item.originialCategory == "top-interview-question",
+            guard item.originialCategory == kTopInterviewQuestionCategory,
                   let stringId = item.originalId,
                   let integerId = Int(stringId),
                   integerId > 0,

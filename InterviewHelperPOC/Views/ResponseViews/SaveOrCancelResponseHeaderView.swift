@@ -8,6 +8,10 @@
 import CoreData
 import SwiftUI
 
+private let kCancelLabelVerticalViewPadding: CGFloat = 4
+private let kSaveLabelVerticalViewPadding: CGFloat = 4
+private let kTopInterviewQuestionCategory: String = "top-interview-question"
+
 struct SaveOrCancelResponseHeaderView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
@@ -22,7 +26,7 @@ struct SaveOrCancelResponseHeaderView: View {
                 Text("Cancel")
                     .foregroundColor(.black)
                     .padding([.horizontal])
-                    .padding([.vertical], 4)
+                    .padding([.vertical], kCancelLabelVerticalViewPadding)
                     .overlay {
                         Capsule(style: .continuous)
                             .stroke(Color.black)
@@ -35,7 +39,7 @@ struct SaveOrCancelResponseHeaderView: View {
                 Text("Save")
                     .foregroundColor(.black)
                     .padding([.horizontal])
-                    .padding([.vertical], 4)
+                    .padding([.vertical], kSaveLabelVerticalViewPadding)
                     .overlay {
                         Capsule(style: .continuous)
                             .stroke(Color.black)
@@ -63,7 +67,7 @@ extension SaveOrCancelResponseHeaderView {
             self.viewContext.delete(promptItem)
         case let topInterviewQuestion as TopInterviewQuestion:
             newPromptItem.identifier = UUID()
-            newPromptItem.originialCategory = "top-interview-question"
+            newPromptItem.originialCategory = kTopInterviewQuestionCategory
             newPromptItem.originalId = String(topInterviewQuestion.id)
             newPromptItem.prompt = topInterviewQuestion.prompt
         default:

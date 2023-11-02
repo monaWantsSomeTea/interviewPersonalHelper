@@ -18,7 +18,6 @@ struct PersistenceController {
             newItem.identifier = UUID()
             newItem.prompt = "Prompt"
             newItem.response = "Response"
-//            newItem.categories = 
         }
         do {
             try viewContext.save()

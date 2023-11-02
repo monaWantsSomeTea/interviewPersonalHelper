@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+private let kResponseTextInputViewShadowRadius: CGFloat = 2
+private let kPaddingBetweenResponseInputAndActionsView: CGFloat = 20
+
 struct UserResponseEditorView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -21,11 +24,11 @@ struct UserResponseEditorView: View {
                 .padding()
             
             TextEditor(text: self.$inputResponse)
-                .shadow(color: .brown, radius: 2)
+                .shadow(color: .brown, radius: kResponseTextInputViewShadowRadius)
                 .fontWeight(.semibold)
                 .foregroundColor(Color(.darkGray))
             
-            Spacer(minLength: 20)
+            Spacer(minLength: kPaddingBetweenResponseInputAndActionsView)
             
             SaveOrCancelResponseHeaderView(inputResponse: self.$inputResponse, question: self.$question)
                 .environment(\.managedObjectContext, viewContext)
