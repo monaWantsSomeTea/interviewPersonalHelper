@@ -11,6 +11,7 @@ import SwiftUI
 private let kQuestionsListVerticalPadding: CGFloat = 4
 private let kTopInterviewQuestionCategory: String = "top-interview-question"
 private let kChevronForwardName: String = "chevron.forward"
+private let kScrollViewTopPadding: CGFloat = 1
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -53,6 +54,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .padding(.top, kScrollViewTopPadding) // Prevents the status bar from being transparent.
         }
         .onAppear {
             self.replaceTopInterviewQuestions(with: self.promptItems)
