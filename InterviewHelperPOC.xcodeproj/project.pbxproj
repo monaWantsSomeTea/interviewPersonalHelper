@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		090547162B059C4700D3553E /* ResponseRecordingActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090547152B059C4700D3553E /* ResponseRecordingActionsView.swift */; };
+		090547182B05E9CC00D3553E /* CreateNewRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090547172B05E9CC00D3553E /* CreateNewRecordingView.swift */; };
+		0905471A2B05ED3B00D3553E /* PlayRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090547192B05ED3B00D3553E /* PlayRecordingView.swift */; };
 		091D676E2AF084DD00188A23 /* PromptItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091D676D2AF084DD00188A23 /* PromptItemViewModel.swift */; };
 		091D67702AF2DB8700188A23 /* ResponseSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091D676F2AF2DB8700188A23 /* ResponseSectionView.swift */; };
 		095AD3BF2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */; };
@@ -28,6 +31,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		090547152B059C4700D3553E /* ResponseRecordingActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseRecordingActionsView.swift; sourceTree = "<group>"; };
+		090547172B05E9CC00D3553E /* CreateNewRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewRecordingView.swift; sourceTree = "<group>"; };
+		090547192B05ED3B00D3553E /* PlayRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRecordingView.swift; sourceTree = "<group>"; };
 		091D676D2AF084DD00188A23 /* PromptItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptItemViewModel.swift; sourceTree = "<group>"; };
 		091D676F2AF2DB8700188A23 /* ResponseSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseSectionView.swift; sourceTree = "<group>"; };
 		095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonQuestionsHeader.swift; sourceTree = "<group>"; };
@@ -68,12 +74,12 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		095AD3BD2ABA2EB5003E1E8C /* Home */ = {
+		095AD3BD2ABA2EB5003E1E8C /* TopInterviewQuestionsListViews */ = {
 			isa = PBXGroup;
 			children = (
 				095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */,
 			);
-			path = Home;
+			path = TopInterviewQuestionsListViews;
 			sourceTree = "<group>";
 		};
 		095AD3C02ABA2F2E003E1E8C /* ResponseViews */ = {
@@ -83,6 +89,7 @@
 				09A3D5832AAF8318001B9B34 /* UserResponseView.swift */,
 				09A3D5872AAF9B93001B9B34 /* UserResponseEditorView.swift */,
 				091D676F2AF2DB8700188A23 /* ResponseSectionView.swift */,
+				090547152B059C4700D3553E /* ResponseRecordingActionsView.swift */,
 			);
 			path = ResponseViews;
 			sourceTree = "<group>";
@@ -91,9 +98,11 @@
 			isa = PBXGroup;
 			children = (
 				095AD3C02ABA2F2E003E1E8C /* ResponseViews */,
-				095AD3BD2ABA2EB5003E1E8C /* Home */,
+				095AD3BD2ABA2EB5003E1E8C /* TopInterviewQuestionsListViews */,
 				09A3D5812AAF8025001B9B34 /* QuestionCard.swift */,
 				09A3D5852AAF864F001B9B34 /* PromptAndResponseView.swift */,
+				090547172B05E9CC00D3553E /* CreateNewRecordingView.swift */,
+				090547192B05ED3B00D3553E /* PlayRecordingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -224,16 +233,19 @@
 				09DFB3722AAD3677007112E9 /* Persistence.swift in Sources */,
 				091D67702AF2DB8700188A23 /* ResponseSectionView.swift in Sources */,
 				09A3D57F2AAD3F8A001B9B34 /* TopInterviewQuestions.swift in Sources */,
+				0905471A2B05ED3B00D3553E /* PlayRecordingView.swift in Sources */,
 				095AD3BF2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift in Sources */,
 				09A3D58A2AAFA004001B9B34 /* SaveOrCancelResponseHeaderView.swift in Sources */,
 				0986A5682AEB1FCA00862D8D /* PromptItem.swift in Sources */,
 				09DFB37D2AAD384C007112E9 /* TopInterviewQuestion.swift in Sources */,
 				09A3D5842AAF8318001B9B34 /* UserResponseView.swift in Sources */,
+				090547162B059C4700D3553E /* ResponseRecordingActionsView.swift in Sources */,
 				09DFB36B2AAD3675007112E9 /* ContentView.swift in Sources */,
 				09A3D5822AAF8025001B9B34 /* QuestionCard.swift in Sources */,
 				09DFB3752AAD3677007112E9 /* InterviewHelperPOC.xcdatamodeld in Sources */,
 				091D676E2AF084DD00188A23 /* PromptItemViewModel.swift in Sources */,
 				09A3D5862AAF864F001B9B34 /* PromptAndResponseView.swift in Sources */,
+				090547182B05E9CC00D3553E /* CreateNewRecordingView.swift in Sources */,
 				09DFB3692AAD3675007112E9 /* InterviewHelperPOCApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
