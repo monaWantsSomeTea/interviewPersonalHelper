@@ -112,6 +112,7 @@ struct PlayRecordingView: View {
             }
             
             Button {
+                self.audioBox.stopPlayback()
                 self.audioBox.status = .stopped
                 self.progressAnimator.stopUpdateTimer()
                 self.isPresentingPlayRecordView = false
