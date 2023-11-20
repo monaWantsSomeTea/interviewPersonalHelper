@@ -5,6 +5,7 @@
 //  Created by Mona Zheng on 9/11/23.
 //
 
+import Combine
 import SwiftUI
 
 private let kViewBackgroundColor: Color = Color(red: 250/255, green: 240/255, blue: 230/255, opacity: 0.2)
@@ -17,11 +18,18 @@ struct PromptAndResponseView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Binding var question: PromptItemViewModel
     
+    @ObservedObject var audioBox = AudioBox()
+    @ObservedObject var progressAnimator: AudioProgressViewAnimator
     @State var isPresentingNewRecordingView: Bool = false
     @State var isPresentingPlayRecordView: Bool = false
     
-    @State var totalRecordTime: CGFloat = 0
-//    @State var
+    init(question: Binding<PromptItemViewModel>) {
+        self._question = question
+        
+        let audioBox = AudioBox()
+        self.audioBox = audioBox
+        self.progressAnimator = AudioProgressViewAnimator(audioBox: audioBox)
+    }
     
     var body: some View {
         self.content
@@ -36,25 +44,23 @@ struct PromptAndResponseView: View {
                     .frame(height: proxy.size.height * kQuestionCardHeightPercentage)
                 ResponseSectionView(question: self.$question)
                     .environment(\.managedObjectContext, viewContext)
-                ResponseRecordingActionsView(isPresentingPlayRecordView: self.$isPresentingPlayRecordView, isPresentingNewRecordingView: self.$isPresentingNewRecordingView)
+                ResponseRecordingActionsView(audioBox: self.audioBox, progressAnimator: self.progressAnimator, isPresentingPlayRecordView: self.$isPresentingPlayRecordView, isPresentingNewRecordingView: self.$isPresentingNewRecordingView)
                     .padding([.horizontal], kResponseRecordingActionsViewPadding)
             }
             .padding([.vertical], kViewVerticalPadding)
             .sheet(isPresented: self.$isPresentingNewRecordingView) {
-                    CreateNewRecordingView(isPresentingPlayRecordView: self.$isPresentingPlayRecordView, isPresentingNewRecordingView: self.$isPresentingNewRecordingView, totalRecordTime: self.$totalRecordTime)
+                CreateNewRecordingView(audioBox: self.audioBox,
+                                       progressAnimator: self.progressAnimator,
+                                       isPresentingPlayRecordView: self.$isPresentingPlayRecordView, isPresentingNewRecordingView: self.$isPresentingNewRecordingView)
                     .presentationDetents([.fraction(0.2)])
                     .interactiveDismissDisabled(true)
             }
             .sheet(isPresented: self.$isPresentingPlayRecordView) {
-                    PlayRecordingView(isPresentingPlayRecordView: self.$isPresentingPlayRecordView, totalRecordTime: .constant(10))
+                PlayRecordingView(audioBox: self.audioBox, progressAnimator: self.progressAnimator, isPresentingPlayRecordView: self.$isPresentingPlayRecordView, totalRecordTime: .constant(10))
                         .presentationDetents([.fraction(0.35)])
                         .interactiveDismissDisabled(true)
             }
         }
-    }
-    
-    init(question: Binding<PromptItemViewModel>) {
-        self._question = question
     }
 }
 

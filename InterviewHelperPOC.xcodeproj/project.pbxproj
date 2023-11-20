@@ -12,6 +12,9 @@
 		0905471A2B05ED3B00D3553E /* PlayRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090547192B05ED3B00D3553E /* PlayRecordingView.swift */; };
 		091D676E2AF084DD00188A23 /* PromptItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091D676D2AF084DD00188A23 /* PromptItemViewModel.swift */; };
 		091D67702AF2DB8700188A23 /* ResponseSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091D676F2AF2DB8700188A23 /* ResponseSectionView.swift */; };
+		093588F52B07E6720077C8DE /* AudioBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093588F42B07E6720077C8DE /* AudioBox.swift */; };
+		093588F72B07E9360077C8DE /* AudioStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093588F62B07E9360077C8DE /* AudioStatus.swift */; };
+		093588FA2B0829D20077C8DE /* AudioProgressViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093588F92B0829D20077C8DE /* AudioProgressViewAnimator.swift */; };
 		095AD3BF2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */; };
 		0986A5682AEB1FCA00862D8D /* PromptItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0986A5672AEB1FCA00862D8D /* PromptItem.swift */; };
 		09A3D57F2AAD3F8A001B9B34 /* TopInterviewQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A3D57E2AAD3F8A001B9B34 /* TopInterviewQuestions.swift */; };
@@ -36,6 +39,10 @@
 		090547192B05ED3B00D3553E /* PlayRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRecordingView.swift; sourceTree = "<group>"; };
 		091D676D2AF084DD00188A23 /* PromptItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptItemViewModel.swift; sourceTree = "<group>"; };
 		091D676F2AF2DB8700188A23 /* ResponseSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseSectionView.swift; sourceTree = "<group>"; };
+		093588F42B07E6720077C8DE /* AudioBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioBox.swift; sourceTree = "<group>"; };
+		093588F62B07E9360077C8DE /* AudioStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioStatus.swift; sourceTree = "<group>"; };
+		093588F82B0815860077C8DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		093588F92B0829D20077C8DE /* AudioProgressViewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProgressViewAnimator.swift; sourceTree = "<group>"; };
 		095AD3BE2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonQuestionsHeader.swift; sourceTree = "<group>"; };
 		0986A5672AEB1FCA00862D8D /* PromptItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptItem.swift; sourceTree = "<group>"; };
 		09A3D57E2AAD3F8A001B9B34 /* TopInterviewQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopInterviewQuestions.swift; sourceTree = "<group>"; };
@@ -74,6 +81,16 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		093588F32B07E65B0077C8DE /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				093588F42B07E6720077C8DE /* AudioBox.swift */,
+				093588F62B07E9360077C8DE /* AudioStatus.swift */,
+				093588F92B0829D20077C8DE /* AudioProgressViewAnimator.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 		095AD3BD2ABA2EB5003E1E8C /* TopInterviewQuestionsListViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +107,8 @@
 				09A3D5872AAF9B93001B9B34 /* UserResponseEditorView.swift */,
 				091D676F2AF2DB8700188A23 /* ResponseSectionView.swift */,
 				090547152B059C4700D3553E /* ResponseRecordingActionsView.swift */,
+				090547172B05E9CC00D3553E /* CreateNewRecordingView.swift */,
+				090547192B05ED3B00D3553E /* PlayRecordingView.swift */,
 			);
 			path = ResponseViews;
 			sourceTree = "<group>";
@@ -101,8 +120,6 @@
 				095AD3BD2ABA2EB5003E1E8C /* TopInterviewQuestionsListViews */,
 				09A3D5812AAF8025001B9B34 /* QuestionCard.swift */,
 				09A3D5852AAF864F001B9B34 /* PromptAndResponseView.swift */,
-				090547172B05E9CC00D3553E /* CreateNewRecordingView.swift */,
-				090547192B05ED3B00D3553E /* PlayRecordingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -126,6 +143,8 @@
 		09DFB3672AAD3675007112E9 /* InterviewHelperPOC */ = {
 			isa = PBXGroup;
 			children = (
+				093588F82B0815860077C8DE /* Info.plist */,
+				093588F32B07E65B0077C8DE /* Audio */,
 				091D676C2AF084C300188A23 /* ViewModels */,
 				09A3D5802AAF800E001B9B34 /* Views */,
 				09DFB37B2AAD3836007112E9 /* Models */,
@@ -231,9 +250,12 @@
 			files = (
 				09A3D5882AAF9B93001B9B34 /* UserResponseEditorView.swift in Sources */,
 				09DFB3722AAD3677007112E9 /* Persistence.swift in Sources */,
+				093588FA2B0829D20077C8DE /* AudioProgressViewAnimator.swift in Sources */,
 				091D67702AF2DB8700188A23 /* ResponseSectionView.swift in Sources */,
+				093588F52B07E6720077C8DE /* AudioBox.swift in Sources */,
 				09A3D57F2AAD3F8A001B9B34 /* TopInterviewQuestions.swift in Sources */,
 				0905471A2B05ED3B00D3553E /* PlayRecordingView.swift in Sources */,
+				093588F72B07E9360077C8DE /* AudioStatus.swift in Sources */,
 				095AD3BF2ABA2EC5003E1E8C /* CommonQuestionsHeader.swift in Sources */,
 				09A3D58A2AAFA004001B9B34 /* SaveOrCancelResponseHeaderView.swift in Sources */,
 				0986A5682AEB1FCA00862D8D /* PromptItem.swift in Sources */,
@@ -378,8 +400,10 @@
 				DEVELOPMENT_TEAM = YSD89CWF5Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = InterviewHelperPOC/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Prepare, Practice and Speak";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allows usage of microphone to record audio";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -412,8 +436,10 @@
 				DEVELOPMENT_TEAM = YSD89CWF5Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = InterviewHelperPOC/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Prepare, Practice and Speak";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allows usage of microphone to record audio";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

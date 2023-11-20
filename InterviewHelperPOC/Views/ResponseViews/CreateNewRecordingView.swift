@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct CreateNewRecordingView: View {
+    @ObservedObject var audioBox: AudioBox
+    @ObservedObject var progressAnimator: AudioProgressViewAnimator
+     
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var isPresentingNewRecordingView: Bool
-    @Binding var totalRecordTime: CGFloat
+    var totalRecordTime: String {
+        print(AudioBox.formattedTime(self.audioBox.audioRecorder?.currentTime ?? 0))
+        return AudioBox.formattedTime(self.audioBox.audioRecorder?.currentTime ?? 0)
+    }
     
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
@@ -19,11 +25,12 @@ struct CreateNewRecordingView: View {
             Text("New Recording")
                 .font(.headline)
             
-            Text("\(self.totalRecordTime)")
+            Text(self.progressAnimator.currentTimeFormatted)
             
             Button {
-                // Stop recording
-                // Save recording to temporary file
+                self.audioBox.stopRecording()
+                self.progressAnimator.stopUpdateTimer()
+//                self.audioBox.audioPlayer?.prepareToPlay()
                 self.isPresentingNewRecordingView = false
                 self.isPresentingPlayRecordView = true
             } label: {
@@ -34,11 +41,16 @@ struct CreateNewRecordingView: View {
             }
             .padding([.top])
         }
+        .onDisappear {
+            self.progressAnimator.stopUpdateTimer()
+            self.audioBox.status = .stopped
+        }
     }
 }
 
 struct CreateNewRecordingView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateNewRecordingView(isPresentingPlayRecordView: .constant(true), isPresentingNewRecordingView: .constant(true), totalRecordTime: .constant(10))
+        let audioBox = AudioBox()
+        CreateNewRecordingView(audioBox: audioBox, progressAnimator: AudioProgressViewAnimator(audioBox: audioBox), isPresentingPlayRecordView: .constant(true), isPresentingNewRecordingView: .constant(true))
     }
 }
