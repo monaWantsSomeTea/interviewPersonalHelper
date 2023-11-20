@@ -14,6 +14,60 @@ class AudioBox: NSObject, ObservableObject {
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
     
+    override init() {
+        super.init()
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(handleRouteChange), name: AVAudioSession.routeChangeNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(handleInteruption), name: AVAudioSession.interruptionNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func handleRouteChange(notification: Notification) {
+        if let info = notification.userInfo,
+           let rawValue = info[AVAudioSessionRouteChangeReasonKey] as? UInt {
+            let reason = AVAudioSession.RouteChangeReason(rawValue: rawValue)
+            if reason == .oldDeviceUnavailable {
+                guard let previousRoute = info[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription,
+                      let previousOutput = previousRoute.outputs.first else {
+                    return
+                }
+                
+                if previousOutput.portType == .headphones {
+                    if self.status == .playing {
+                        self.pausePlayback()
+                    } else if self.status == .recording {
+                        self.stopRecording()
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func handleInteruption(notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let rawValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt
+        {
+            let type = AVAudioSession.InterruptionType(rawValue: rawValue)
+            if type == .began {
+                if self.status == .playing {
+                    self.pausePlayback()
+                } else if self.status == .recording {
+                    self.stopRecording()
+                }
+            } else {
+                if let rawValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
+                    let options = AVAudioSession.InterruptionOptions(rawValue: rawValue)
+                    if options == .shouldResume && self.status == .paused {
+                        self.resumePlayback()
+                    }
+                }
+            }
+        }
+    }
+    
     var urlForTemporaryDirectoryPath: URL {
         let fileManager = FileManager.default
         let tempDirectory = fileManager.temporaryDirectory
@@ -39,9 +93,9 @@ class AudioBox: NSObject, ObservableObject {
         
         do {
             // TODO: Delete the print statement
-//            print("TEMP URL PATH:", self.urlForTemporaryDirectoryPath.absoluteString)
+            //            print("TEMP URL PATH:", self.urlForTemporaryDirectoryPath.absoluteString)
             self.audioRecorder = try AVAudioRecorder(url: self.urlForTemporaryDirectoryPath,
-                                                settings: recordSettings)
+                                                     settings: recordSettings)
             self.audioRecorder?.delegate = self
         } catch {
             print("Error creating Audio Recorder.")
@@ -80,7 +134,7 @@ class AudioBox: NSObject, ObservableObject {
         } else {
             self.audioPlayer?.play()
         }
-       
+        
         self.status = .playing
     }
     
