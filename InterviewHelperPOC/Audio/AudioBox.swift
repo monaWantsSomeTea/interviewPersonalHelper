@@ -128,13 +128,24 @@ class AudioBox: NSObject, ObservableObject {
         }
     }
     
-    func resumePlayback(atTime time: TimeInterval? = nil) {
-        if let time {
-            self.audioPlayer?.play(atTime: time)
-        } else {
-            self.audioPlayer?.play()
+    func rewind(by time: TimeInterval) {
+        guard let audioPlayer = self.audioPlayer else {
+            return
         }
         
+        audioPlayer.currentTime = audioPlayer.currentTime - time
+    }
+    
+    func fastForward(by time: TimeInterval) {
+        guard let audioPlayer = self.audioPlayer else {
+            return
+        }
+        
+        audioPlayer.currentTime = audioPlayer.currentTime + time
+    }
+    
+    func resumePlayback() {
+        self.audioPlayer?.play()
         self.status = .playing
     }
     

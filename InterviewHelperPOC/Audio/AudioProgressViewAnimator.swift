@@ -31,8 +31,11 @@ class AudioProgressViewAnimator: ObservableObject {
         self.updateTimer?.add(to: RunLoop.current, forMode: RunLoop.Mode.common)
     }
     
+    /// Updates the current time progress.
     @objc func updateLoop() {
-        if self.audioBox.status == .playing {
+        // Allows the current time label  to update when the player is playing
+        // or when rewinding or fastforwarding.
+        if self.audioBox.status == .playing || self.audioBox.status == .paused {
             if CFAbsoluteTimeGetCurrent() - self.previousUpdateTimeForPlayer > 0.1 {
                 self.previousUpdateTimeForPlayer = CFAbsoluteTimeGetCurrent()
                 self.currentTimeFormatted = Self.formattedTime(self.audioBox.currentTimeForPlayer)

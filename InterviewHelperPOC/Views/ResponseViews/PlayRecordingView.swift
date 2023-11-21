@@ -56,7 +56,7 @@ struct PlayRecordingView: View {
                     Spacer()
                 
                     Button {
-                        
+                        self.audioBox.rewind(by: 5)
                     } label: {
                         Image(systemName: "backward.circle")
                             .resizable()
@@ -88,7 +88,7 @@ struct PlayRecordingView: View {
                     }
                     
                     Button {
-                        
+                        self.audioBox.fastForward(by: 5)
                     } label: {
                         Image(systemName: "forward.circle")
                             .resizable()
