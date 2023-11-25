@@ -7,13 +7,19 @@
 
 import SwiftUI
 
+private let kTopInterviewQuestionCategory: String = "top-interview-question"
+
 struct PlayRecordingView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+
     @ObservedObject var audioBox: AudioBox
     @ObservedObject var progressAnimator: AudioProgressViewAnimator
     
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var totalRecordTime: CGFloat
-    
+    @Binding var promptItemViewModel: PromptItemViewModel
+    /// Audio has not been saved to CoreData.
+    @Binding var hasUnsavedAudio: Bool
     
     var previousStatus: AudioStatus = .playing
     var playOrPauseActionImageName: String {
@@ -71,7 +77,7 @@ struct PlayRecordingView: View {
                         case .paused:
                             self.audioBox.resumePlayback()
                         case .stopped:
-                            self.audioBox.play()
+                            self.audioBox.play(identifier: self.promptItemViewModel.identifier)
                             self.progressAnimator.startUpdateLoop()
                             break
                         case .recording:
@@ -102,7 +108,14 @@ struct PlayRecordingView: View {
             }
             .overlay(alignment: .bottomTrailing) {
                 Button {
-
+                    // TODO: delete audio file or temp audio file
+                    self.audioBox.stopPlayback()
+                    self.audioBox.status = .stopped
+                    self.progressAnimator.stopUpdateTimer()
+                    
+                    self.deleteAudio()
+                    
+                    self.isPresentingPlayRecordView = false
                 } label: {
                     Image(systemName: "trash.fill")
                         .resizable()
@@ -116,9 +129,13 @@ struct PlayRecordingView: View {
                 self.audioBox.status = .stopped
                 self.progressAnimator.stopUpdateTimer()
                 self.isPresentingPlayRecordView = false
+                
+                if self.hasUnsavedAudio {
+                    self.saveRecording(for: self.promptItemViewModel)
+                }
              
             } label: {
-                Text("Save") // Or dismiss depending on state.
+                Text(self.hasUnsavedAudio ? "Save" : "Dismiss")
                     .foregroundColor(.white)
                     .padding([.horizontal], 16)
                     .padding([.vertical], 6)
@@ -132,15 +149,72 @@ struct PlayRecordingView: View {
     }
 }
 
+extension PlayRecordingView {
+    private func deleteAudio() {
+        do {
+            try self.audioBox.deleteAudio()
+        } catch {
+            fatalError("Audio was not deleted")
+            // throw
+        }
+    }
+    
+    private func saveRecording(for promptItem: PromptItemViewModel) {
+        do {
+            let audioDetails = try self.audioBox.writeAudioToDocumentsDirectory(for: promptItem)
+            try self.saveToCoreData(for: promptItem, with: audioDetails)
+            self.hasUnsavedAudio = false
+        } catch {
+            fatalError("Audio file was not saved to the document directory")
+            // TODO: Show toast
+        }
+    }
+
+    /// Save the prompt item to core data when it does not contain the url to the audio file.
+    private func saveToCoreData(for promptItem: PromptItemViewModel, with details: AudioBox.AudioDetails) throws {        
+        let newPromptItem = PromptItem(context: self.viewContext)
+        
+        switch promptItem.model {
+        case let promptItem as PromptItem:
+            // The old prompt item properties are assigned to the new prompt item.
+            // Then we delete the old prompt item.
+            // This is so that the `onChange` will detect the changes of CoreData for the PromptItems.
+            newPromptItem.identifier = promptItem.identifier
+            newPromptItem.originialCategory = promptItem.originialCategory
+            newPromptItem.originalId = promptItem.originalId
+            newPromptItem.prompt = promptItem.prompt
+            newPromptItem.response = promptItem.response
+         
+            
+            self.viewContext.delete(promptItem)
+        case let topInterviewQuestion as TopInterviewQuestion:
+            newPromptItem.identifier = details.identifier
+            newPromptItem.originialCategory = kTopInterviewQuestionCategory
+            newPromptItem.originalId = String(topInterviewQuestion.id)
+            newPromptItem.prompt = topInterviewQuestion.prompt
+        default:
+            fatalError("Unsupported type")
+        }
+
+        do {
+            try self.viewContext.save()
+        } catch let error as NSError {
+            // TODO: Make a toast or alert
+            print("Could not save. \(error), \(error.userInfo)")
+//            throw
+        }
+    }
+}
+
 extension View {
     func hidden(_ shouldHide: Bool) -> some View {
         opacity(shouldHide ? 0 : 1)
     }
 }
 
-struct PlayRecordingView_Previews: PreviewProvider {
-    static var previews: some View {
-        let audioBox = AudioBox()
-        return PlayRecordingView(audioBox: audioBox, progressAnimator: AudioProgressViewAnimator(audioBox: audioBox), isPresentingPlayRecordView: .constant(true), totalRecordTime: .constant(10))
-    }
-}
+//struct PlayRecordingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let audioBox = AudioBox()
+//        return PlayRecordingView(audioBox: audioBox, progressAnimator: AudioProgressViewAnimator(audioBox: audioBox), isPresentingPlayRecordView: .constant(true), totalRecordTime: .constant(10))
+//    }
+//}

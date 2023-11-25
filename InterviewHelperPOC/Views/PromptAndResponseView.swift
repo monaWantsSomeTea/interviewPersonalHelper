@@ -22,6 +22,10 @@ struct PromptAndResponseView: View {
     @ObservedObject var progressAnimator: AudioProgressViewAnimator
     @State var isPresentingNewRecordingView: Bool = false
     @State var isPresentingPlayRecordView: Bool = false
+    /// Audio has been stored in file in either the temporary or document directory.
+    @State var hasStoredAudio: Bool = false
+    /// Audio has not been saved to CoreData.
+    @State var hasUnsavedAudio: Bool = false
     
     init(question: Binding<PromptItemViewModel>) {
         self._question = question
@@ -44,34 +48,48 @@ struct PromptAndResponseView: View {
                     .frame(height: proxy.size.height * kQuestionCardHeightPercentage)
                 ResponseSectionView(question: self.$question)
                     .environment(\.managedObjectContext, viewContext)
-                ResponseRecordingActionsView(audioBox: self.audioBox, progressAnimator: self.progressAnimator, isPresentingPlayRecordView: self.$isPresentingPlayRecordView, isPresentingNewRecordingView: self.$isPresentingNewRecordingView)
+                ResponseRecordingActionsView(audioBox: self.audioBox,
+                                             progressAnimator: self.progressAnimator,
+                                             isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
+                                             isPresentingNewRecordingView: self.$isPresentingNewRecordingView,
+                                             promptItemViewModel: self.$question,
+                                             hasStoredAudio: self.$hasStoredAudio)
                     .padding([.horizontal], kResponseRecordingActionsViewPadding)
             }
             .padding([.vertical], kViewVerticalPadding)
             .sheet(isPresented: self.$isPresentingNewRecordingView) {
                 CreateNewRecordingView(audioBox: self.audioBox,
                                        progressAnimator: self.progressAnimator,
-                                       isPresentingPlayRecordView: self.$isPresentingPlayRecordView, isPresentingNewRecordingView: self.$isPresentingNewRecordingView)
+                                       isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
+                                       isPresentingNewRecordingView: self.$isPresentingNewRecordingView,
+                                       hasStoredAudio: self.$hasStoredAudio,
+                                       hasUnsavedAudio: self.$hasUnsavedAudio)
                     .presentationDetents([.fraction(0.2)])
                     .interactiveDismissDisabled(true)
             }
             .sheet(isPresented: self.$isPresentingPlayRecordView) {
-                PlayRecordingView(audioBox: self.audioBox, progressAnimator: self.progressAnimator, isPresentingPlayRecordView: self.$isPresentingPlayRecordView, totalRecordTime: .constant(10))
+                PlayRecordingView(audioBox: self.audioBox,
+                                  progressAnimator: self.progressAnimator,
+                                  isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
+                                  totalRecordTime: .constant(10),
+                                  promptItemViewModel: self.$question,
+                                  hasUnsavedAudio: self.$hasUnsavedAudio)
                         .presentationDetents([.fraction(0.35)])
                         .interactiveDismissDisabled(true)
+                        .environment(\.managedObjectContext, viewContext)
             }
         }
     }
 }
 
-struct QuestionView_Previews: PreviewProvider {
-    static var previews: some View {
-        PromptAndResponseView(question:
-            Binding(
-                get: { TopInterviewQuestions().questions[0] },
-                set: { _ in }
-            )
-        )
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
-}
+//struct QuestionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PromptAndResponseView(question:
+//            Binding(
+//                get: { TopInterviewQuestions().questions[0] },
+//                set: { _ in }
+//            )
+//        )
+//        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//    }
+//}

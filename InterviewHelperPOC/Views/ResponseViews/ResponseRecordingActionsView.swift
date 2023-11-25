@@ -16,16 +16,15 @@ struct ResponseRecordingActionsView: View {
     @ObservedObject var progressAnimator: AudioProgressViewAnimator
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var isPresentingNewRecordingView: Bool
+    @Binding var promptItemViewModel: PromptItemViewModel
+    @Binding var hasStoredAudio: Bool
     
     @State var hasMicrophoneAccess: Bool = false
     @State var displayRequestForMicophoneAccess: Bool = false
     
-    // TODO: Disable when no recording is saved
-    @State var hasSavedRecording: Bool = true
-    
     var body: some View {
         HStack {
-            Button(action: self.playRecording) {
+            Button(action: self.playAudio) {
                 Text("Play Recording")
                     .fontWeight(.medium)
                     .foregroundColor(.black)
@@ -36,8 +35,8 @@ struct ResponseRecordingActionsView: View {
                             .stroke(Color.black)
                     }
             }
-            .opacity(self.hasSavedRecording ? 1 : 0.3)
-            .disabled(!self.hasSavedRecording)
+            .opacity(self.hasStoredAudio ? 1 : 0.3)
+            .disabled(!self.hasStoredAudio)
 
             Spacer()
 
@@ -51,7 +50,13 @@ struct ResponseRecordingActionsView: View {
             .clipShape(Capsule(style: .continuous))
         }
         .onAppear {
-            self.audioBox.setupRecorder()
+//            self.audioBox.setupRecorder(promptItemIdentifier: self.promptItemViewModel.identifier,
+//                                        prompt: self.promptItemViewModel.prompt)
+            self.audioBox
+                .setURLFromPromptItem(identifier: self.promptItemViewModel.identifier,
+                                      prompt: self.promptItemViewModel.prompt)
+            
+            self.hasStoredAudio = self.audioBox.hasStoredAudio
         }
         .alert(isPresented: self.$displayRequestForMicophoneAccess) {
             Alert(title: Text("Requires Microphone Access"), message: Text("Enable microphone access to record. \nGo to iPhone Settings to enable access."), dismissButton: .default(Text("Dismiss")))
@@ -66,7 +71,8 @@ extension ResponseRecordingActionsView {
             self.hasMicrophoneAccess = granted
             if granted {
                 self.isPresentingNewRecordingView = true
-                audioBox.record()
+                self.audioBox.record(promptItemIdentifier: self.promptItemViewModel.identifier,
+                                     prompt: self.promptItemViewModel.prompt)
                 self.progressAnimator.startUpdateLoop()
             } else {
                 displayRequestForMicophoneAccess = true
@@ -74,9 +80,9 @@ extension ResponseRecordingActionsView {
         }
     }
     
-    private func playRecording() {
-        if self.audioBox.status == .stopped {
-            self.audioBox.play()
+    private func playAudio() {
+        if self.audioBox.status == .stopped {            
+            self.audioBox.play(identifier: self.promptItemViewModel.identifier)
             self.progressAnimator.startUpdateLoop()
             self.isPresentingPlayRecordView = true
         }
@@ -89,7 +95,8 @@ extension ResponseRecordingActionsView {
         
         if self.hasMicrophoneAccess {
             self.isPresentingNewRecordingView = true
-            self.audioBox.record()
+            self.audioBox.record(promptItemIdentifier: self.promptItemViewModel.identifier,
+                                 prompt: self.promptItemViewModel.prompt)
             self.progressAnimator.startUpdateLoop()
         } else {
             self.requestMicrophoneAccess()
@@ -98,17 +105,22 @@ extension ResponseRecordingActionsView {
 }
 
 
-struct ResponseRecordingActionsView_Previews: PreviewProvider {
-    static var previews: some View {
-        let audioBox = AudioBox()
-        ResponseRecordingActionsView(audioBox: audioBox, progressAnimator: AudioProgressViewAnimator(audioBox: audioBox), isPresentingPlayRecordView: .constant(true), isPresentingNewRecordingView: .constant(true))
-        
-        PromptAndResponseView(question:
-            Binding(
-                get: { TopInterviewQuestions().questions[0] },
-                set: { _ in }
-            )
-        )
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
-}
+//struct ResponseRecordingActionsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let audioBox = AudioBox()
+//        ResponseRecordingActionsView(audioBox: audioBox,
+//                                     progressAnimator: AudioProgressViewAnimator(audioBox: audioBox),
+//                                     isPresentingPlayRecordView: .constant(true),
+//                                     isPresentingNewRecordingView: .constant(true),
+//                                     promptItemViewModel: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem)),
+//                                     hasStoredAudio: .constant(false))
+//        
+//        PromptAndResponseView(question:
+//            Binding(
+//                get: { TopInterviewQuestions().questions[0] },
+//                set: { _ in }
+//            )
+//        )
+//        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//    }
+//}
