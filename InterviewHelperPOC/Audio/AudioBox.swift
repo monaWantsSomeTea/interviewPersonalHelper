@@ -41,7 +41,10 @@ class AudioBox: NSObject, ObservableObject {
         if let identifier {
             filePath = "TemporaryMemory\(identifier).caf"
         } else {
-            filePath = "TemporaryMemory\(prompt).caf"
+            let prompt = prompt
+                .filter { $0.isLetter || $0.isWhitespace}
+                .map { $0.isWhitespace ? "-" : $0 }
+            filePath = "TemporaryMemory\(String(prompt)).caf"
         }
        
         return tempDirectory.appendingPathComponent(filePath)
