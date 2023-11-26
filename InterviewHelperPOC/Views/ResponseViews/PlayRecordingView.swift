@@ -152,7 +152,8 @@ struct PlayRecordingView: View {
 extension PlayRecordingView {
     private func deleteAudio() {
         do {
-            try self.audioBox.deleteAudio()
+            try self.audioBox.deleteAudio(identifier: self.promptItemViewModel.identifier,
+                                          prompt: self.promptItemViewModel.prompt)
         } catch {
             fatalError("Audio was not deleted")
             // throw

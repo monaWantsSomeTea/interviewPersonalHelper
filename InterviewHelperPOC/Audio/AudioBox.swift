@@ -203,17 +203,34 @@ class AudioBox: NSObject, ObservableObject {
         self.status = .stopped
     }
     
-    func deleteAudio() throws {
-        if let url = self.urlForTemporaryDirectoryPath {
-            try self.deleteTemporaryAudioFileURL(url: url)
-        } else if let url = self.urlForDocumentDirectoryPath {
-            print("THIS URL Was not suppose to be deleted")
-            try FileManager.default.removeItem(at: url)
+    func deleteAudio(identifier: UUID?, prompt: String) throws {
+        guard let identifier else {
+            let url = self.getTemporaryURL(prompt: prompt)
+            if FileManager.default.fileExists(atPath: url.path()) {
+                try self.deleteTemporaryAudioFileURL(url: url)
+            } else {
+                self.hasStoredAudio = false
+//                throw SomeError.noValidFileURLToDelete
+                return
+            }
+            
+            self.hasStoredAudio = false
+            return
+        }
+        
+        // TODO: DO we want the parameter prompt if identifier is here?
+        let temporaryFileURL = self.getTemporaryURL(identifier: identifier, prompt: prompt)
+        let savedFileURL = self.getURLWithinDocumentDirectory(with: identifier)
+        
+        if FileManager.default.fileExists(atPath: temporaryFileURL.path())  {
+            try self.deleteTemporaryAudioFileURL(url: temporaryFileURL)
+        } else if FileManager.default.fileExists(atPath: savedFileURL.path()) {
+            try FileManager.default.removeItem(at: savedFileURL)
             self.urlForDocumentDirectoryPath = nil
         }
         
-        // TODO: Check the actual path using the identifier to see if it is valid
-        if self.urlForDocumentDirectoryPath == nil {
+        // No audio file stored on device.
+        if !FileManager.default.fileExists(atPath: savedFileURL.path()) {
             self.hasStoredAudio = false
         }
     }

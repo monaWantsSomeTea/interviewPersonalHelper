@@ -35,8 +35,8 @@ struct ResponseRecordingActionsView: View {
                             .stroke(Color.black)
                     }
             }
-            .opacity(self.hasStoredAudio ? 1 : 0.3)
-            .disabled(!self.hasStoredAudio)
+            .opacity(self.audioBox.hasStoredAudio ? 1 : 0.3)
+            .disabled(!self.audioBox.hasStoredAudio)
 
             Spacer()
 
