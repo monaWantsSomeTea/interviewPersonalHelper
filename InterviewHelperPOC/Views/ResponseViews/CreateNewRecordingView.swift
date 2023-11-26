@@ -13,8 +13,6 @@ struct CreateNewRecordingView: View {
      
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var isPresentingNewRecordingView: Bool
-    /// Audio has been stored in file in either the temporary or document directory.
-    @Binding var hasStoredAudio: Bool
     /// Audio has not been saved to CoreData.
     @Binding var hasUnsavedAudio: Bool
     
@@ -34,8 +32,6 @@ struct CreateNewRecordingView: View {
             Button {
                 self.audioBox.stopRecording()
                 self.progressAnimator.stopUpdateTimer()
-                
-                self.hasStoredAudio = true
                 self.hasUnsavedAudio = true
                 self.isPresentingNewRecordingView = false
                 self.isPresentingPlayRecordView = true
@@ -61,7 +57,6 @@ struct CreateNewRecordingView_Previews: PreviewProvider {
                                progressAnimator: AudioProgressViewAnimator(audioBox: audioBox),
                                isPresentingPlayRecordView: .constant(true),
                                isPresentingNewRecordingView: .constant(true),
-                               hasStoredAudio: .constant(false),
                                hasUnsavedAudio: .constant(false))
     }
 }

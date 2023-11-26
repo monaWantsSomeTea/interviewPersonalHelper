@@ -17,7 +17,6 @@ struct ResponseRecordingActionsView: View {
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var isPresentingNewRecordingView: Bool
     @Binding var promptItemViewModel: PromptItemViewModel
-    @Binding var hasStoredAudio: Bool
     
     @State var hasMicrophoneAccess: Bool = false
     @State var displayRequestForMicophoneAccess: Bool = false
@@ -50,13 +49,8 @@ struct ResponseRecordingActionsView: View {
             .clipShape(Capsule(style: .continuous))
         }
         .onAppear {
-//            self.audioBox.setupRecorder(promptItemIdentifier: self.promptItemViewModel.identifier,
-//                                        prompt: self.promptItemViewModel.prompt)
-            self.audioBox
-                .setURLFromPromptItem(identifier: self.promptItemViewModel.identifier,
-                                      prompt: self.promptItemViewModel.prompt)
-            
-            self.hasStoredAudio = self.audioBox.hasStoredAudio
+            self.audioBox.checkForStoredAudio(identifier: self.promptItemViewModel.identifier,
+                                             prompt: self.promptItemViewModel.prompt)
         }
         .alert(isPresented: self.$displayRequestForMicophoneAccess) {
             Alert(title: Text("Requires Microphone Access"), message: Text("Enable microphone access to record. \nGo to iPhone Settings to enable access."), dismissButton: .default(Text("Dismiss")))

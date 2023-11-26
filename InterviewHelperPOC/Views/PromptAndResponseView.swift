@@ -22,8 +22,6 @@ struct PromptAndResponseView: View {
     @ObservedObject var progressAnimator: AudioProgressViewAnimator
     @State var isPresentingNewRecordingView: Bool = false
     @State var isPresentingPlayRecordView: Bool = false
-    /// Audio has been stored in file in either the temporary or document directory.
-    @State var hasStoredAudio: Bool = false
     /// Audio has not been saved to CoreData.
     @State var hasUnsavedAudio: Bool = false
     
@@ -52,8 +50,7 @@ struct PromptAndResponseView: View {
                                              progressAnimator: self.progressAnimator,
                                              isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
                                              isPresentingNewRecordingView: self.$isPresentingNewRecordingView,
-                                             promptItemViewModel: self.$question,
-                                             hasStoredAudio: self.$hasStoredAudio)
+                                             promptItemViewModel: self.$question)
                     .padding([.horizontal], kResponseRecordingActionsViewPadding)
             }
             .padding([.vertical], kViewVerticalPadding)
@@ -62,7 +59,6 @@ struct PromptAndResponseView: View {
                                        progressAnimator: self.progressAnimator,
                                        isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
                                        isPresentingNewRecordingView: self.$isPresentingNewRecordingView,
-                                       hasStoredAudio: self.$hasStoredAudio,
                                        hasUnsavedAudio: self.$hasUnsavedAudio)
                     .presentationDetents([.fraction(0.2)])
                     .interactiveDismissDisabled(true)

@@ -10,6 +10,7 @@ import AVFoundation
 
 class AudioBox: NSObject, ObservableObject {
     @Published var status: AudioStatus = .stopped
+    /// Audio has been stored in file in either the temporary or document directory.
     @Published var hasStoredAudio: Bool = false
     
     var audioRecorder: AVAudioRecorder?
@@ -47,12 +48,8 @@ class AudioBox: NSObject, ObservableObject {
     }
     
     func setupRecorder(promptItemIdentifier: UUID?, prompt: String) {
-        self.urlForTemporaryDirectoryPath = self.getTemporaryURL(identifier: promptItemIdentifier,
-                                                                    prompt: prompt)
-        guard let urlForTemporaryDirectoryPath = self.urlForTemporaryDirectoryPath else {
-//            throw
-            fatalError("Temporary url not found")
-        }
+        let url = self.getTemporaryURL(identifier: promptItemIdentifier, prompt: prompt)
+        self.urlForTemporaryDirectoryPath = url
         
         let recordSettings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatLinearPCM),
@@ -62,17 +59,15 @@ class AudioBox: NSObject, ObservableObject {
         ]
         
         do {
-            self.audioRecorder = try AVAudioRecorder(url: urlForTemporaryDirectoryPath,
-                                                     settings: recordSettings)
+            self.audioRecorder = try AVAudioRecorder(url: url, settings: recordSettings)
             self.audioRecorder?.delegate = self
-            self.hasStoredAudio = true
         } catch {
             print("Error creating Audio Recorder.")
         }
     }
     
     /// - returns: Whether or not the file with this url is written in
-    func setURLFromPromptItem(identifier: UUID?, prompt: String) {
+    func checkForStoredAudio(identifier: UUID?, prompt: String) {
         // Assign the permanent url when the prompt identifier exists
         // and Core data contains data for this Prompt item
         guard let identifier else {
@@ -96,7 +91,7 @@ class AudioBox: NSObject, ObservableObject {
     
     func writeAudioToDocumentsDirectory(for promptItem: PromptItemViewModel) throws -> AudioDetails {
         guard let urlForTemporaryDirectoryPath = self.urlForTemporaryDirectoryPath else {
-//            throw
+            // TODO: Handle error
             fatalError("Temporary url not found")
         }
 
@@ -126,20 +121,28 @@ class AudioBox: NSObject, ObservableObject {
             return AudioDetails(identifier: identifier, url: url)
         } catch {
             fatalError("Failed to save data from the temporary file to the new file path.")
-        // TODO: Handle error
-//            throw
+            // TODO: Handle error
         }
     }
     
     func record(promptItemIdentifier: UUID?, prompt: String) {
         self.setupRecorder(promptItemIdentifier: promptItemIdentifier, prompt: prompt)
-        self.audioRecorder?.record()
         self.status = .recording
+        guard let audioRecorder = self.audioRecorder else {
+            fatalError("No recorder was found.")
+        }
+        
+        audioRecorder.record()
     }
     
     func stopRecording() {
-        self.audioRecorder?.stop()
         self.status = .stopped
+        guard let audioRecorder = self.audioRecorder else {
+            fatalError("No recorder was found.")
+        }
+        
+        audioRecorder.stop()
+        self.hasStoredAudio = true
     }
     
     func play(identifier: UUID?) {
@@ -150,6 +153,7 @@ class AudioBox: NSObject, ObservableObject {
         } else if let identifier {
             url = self.getURLWithinDocumentDirectory(with: identifier)
         } else {
+            // TODO: Handle error
             fatalError("No url found")
         }
         
@@ -157,10 +161,11 @@ class AudioBox: NSObject, ObservableObject {
             do {
                 self.audioPlayer = try AVAudioPlayer(contentsOf: url)
             } catch {
+                // TODO: Handle error
                 print(error.localizedDescription)
-                print("ISurlNil?:", url)
             }
         } else {
+            // TODO: Handle error
             fatalError("Can not play. Url to file is not valid.")
         }
         
@@ -210,6 +215,7 @@ class AudioBox: NSObject, ObservableObject {
                 try self.deleteTemporaryAudioFileURL(url: url)
             } else {
                 self.hasStoredAudio = false
+                // TODO: Handle error
 //                throw SomeError.noValidFileURLToDelete
                 return
             }
@@ -315,6 +321,7 @@ extension AudioBox {
 extension AudioBox: AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         self.status = .stopped
+        self.hasStoredAudio = flag
         
         // TODO: Show an error message when recording failed
     }
