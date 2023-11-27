@@ -49,7 +49,7 @@ class AudioBox: NSObject, ObservableObject {
         return tempDirectory.appendingPathComponent(filePath)
     }
     
-    func setupRecorder(promptItemIdentifier: UUID?, prompt: String) {
+    func setupRecorder(promptItemIdentifier: UUID?, prompt: String) throws {
         let url = self.getTemporaryURL(identifier: promptItemIdentifier, prompt: prompt)
         self.urlForTemporaryDirectoryPath = url
         
@@ -60,12 +60,8 @@ class AudioBox: NSObject, ObservableObject {
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
         
-        do {
-            self.audioRecorder = try AVAudioRecorder(url: url, settings: recordSettings)
-            self.audioRecorder?.delegate = self
-        } catch {
-            print("Error creating Audio Recorder.")
-        }
+        self.audioRecorder = try AVAudioRecorder(url: url, settings: recordSettings)
+        self.audioRecorder?.delegate = self
     }
     
     /// - returns: Whether or not the file with this url is written in
@@ -94,39 +90,27 @@ class AudioBox: NSObject, ObservableObject {
     
     func writeAudioToDocumentsDirectory(for promptItem: PromptItemViewModel) throws -> AudioDetails {
         guard let urlForTemporaryDirectoryPath = self.urlForTemporaryDirectoryPath else {
-            // TODO: Handle error
             fatalError("Temporary url not found")
         }
 
-        do {
-            let data = try Data(contentsOf: urlForTemporaryDirectoryPath)
-            
-            
-            let identifier: UUID = promptItem.identifier ?? UUID()
-            let url = self.getURLWithinDocumentDirectory(with: identifier)
+        let data = try Data(contentsOf: urlForTemporaryDirectoryPath)
         
-            if FileManager.default.fileExists(atPath: urlForTemporaryDirectoryPath.path()) {
-                do {
-                    try data.write(to: url, options: [.atomic])
-                    try self.deleteTemporaryAudioFileURL(url: urlForTemporaryDirectoryPath)
-                }
-                catch {
-                    print("Can not move files")
-                    fatalError("Can not move files")
-                }
-            } else {
-                print("Temp file doesn't no exisit")
-            }
-            
-            return AudioDetails(identifier: identifier, url: url)
-        } catch {
-            fatalError("Failed to save data from the temporary file to the new file path.")
-            // TODO: Handle error
+        
+        let identifier: UUID = promptItem.identifier ?? UUID()
+        let url = self.getURLWithinDocumentDirectory(with: identifier)
+    
+        if FileManager.default.fileExists(atPath: urlForTemporaryDirectoryPath.path()) {
+            try data.write(to: url, options: [.atomic])
+            try self.deleteTemporaryAudioFileURL(url: urlForTemporaryDirectoryPath)
+        } else {
+            fatalError("File url is not found in the temporary directory.")
         }
+        
+        return AudioDetails(identifier: identifier, url: url)
     }
     
-    func record(promptItemIdentifier: UUID?, prompt: String) {
-        self.setupRecorder(promptItemIdentifier: promptItemIdentifier, prompt: prompt)
+    func record(promptItemIdentifier: UUID?, prompt: String) throws {
+        try self.setupRecorder(promptItemIdentifier: promptItemIdentifier, prompt: prompt)
         self.status = .recording
         guard let audioRecorder = self.audioRecorder else {
             fatalError("No recorder was found.")
@@ -145,7 +129,7 @@ class AudioBox: NSObject, ObservableObject {
         self.hasStoredAudio = true
     }
     
-    func play(identifier: UUID?) {
+    func play(identifier: UUID?) throws {
         let url: URL
         
         if let urlForTemporaryDirectoryPath = self.urlForTemporaryDirectoryPath {
@@ -153,23 +137,19 @@ class AudioBox: NSObject, ObservableObject {
         } else if let identifier {
             url = self.getURLWithinDocumentDirectory(with: identifier)
         } else {
-            // TODO: Handle error
             fatalError("No url found")
         }
         
         if FileManager.default.fileExists(atPath: url.path()) {
-            do {
-                self.audioPlayer = try AVAudioPlayer(contentsOf: url)
-            } catch {
-                // TODO: Handle error
-                print(error.localizedDescription)
-            }
+            self.audioPlayer = try AVAudioPlayer(contentsOf: url)
         } else {
-            // TODO: Handle error
             fatalError("Can not play. Url to file is not valid.")
         }
         
-        guard let audioPlayer = self.audioPlayer else { return }
+        guard let audioPlayer = self.audioPlayer else {
+            fatalError("Audio player not found")
+        }
+        
         audioPlayer.delegate = self
         if audioPlayer.duration > 0.0 {
             audioPlayer.play()
@@ -229,9 +209,7 @@ class AudioBox: NSObject, ObservableObject {
                 try self.deleteTemporaryAudioFileURL(url: url)
             } else {
                 self.hasStoredAudio = false
-                // TODO: Handle error
-//                throw SomeError.noValidFileURLToDelete
-                return
+                fatalError("URL to file is not found in the temporary directory.")
             }
             
             // No audio is stored when the identifier for the prompt item does not exisit.
@@ -239,7 +217,6 @@ class AudioBox: NSObject, ObservableObject {
             return
         }
         
-        // TODO: DO we want the parameter prompt if identifier is here?
         let temporaryFileURL = self.getTemporaryURL(identifier: identifier, prompt: prompt)
         let savedFileURL = self.getURLWithinDocumentDirectory(with: identifier)
         
@@ -336,8 +313,6 @@ extension AudioBox: AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         self.status = .stopped
         self.hasStoredAudio = flag
-        
-        // TODO: Show an error message when recording failed
     }
 }
 

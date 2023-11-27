@@ -16,7 +16,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             try session.setCategory(.playAndRecord, options: .defaultToSpeaker)
             try session.setActive(true)
         } catch {
-            print("AVAudioSession configuration error: \(error.localizedDescription)")
+            fatalError("AVAudioSession configuration error: \(error.localizedDescription)")
         }
         
         return true

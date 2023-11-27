@@ -20,6 +20,7 @@ struct ResponseRecordingActionsView: View {
     
     @State var hasMicrophoneAccess: Bool = false
     @State var displayRequestForMicophoneAccess: Bool = false
+    @State var showGenericErrorMessage: Bool = false
     
     var body: some View {
         HStack {
@@ -53,7 +54,14 @@ struct ResponseRecordingActionsView: View {
                                              prompt: self.promptItemViewModel.prompt)
         }
         .alert(isPresented: self.$displayRequestForMicophoneAccess) {
-            Alert(title: Text("Requires Microphone Access"), message: Text("Enable microphone access to record. \nGo to iPhone Settings to enable access."), dismissButton: .default(Text("Dismiss")))
+            Alert(title: Text("Requires Microphone Access"),
+                  message: Text("Enable microphone access to record. \nGo to iPhone Settings to enable access."),
+                  dismissButton: .default(Text("Dismiss")))
+        }
+        .alert(isPresented: self.$showGenericErrorMessage) {
+            Alert(title: Text("Something went wrong"),
+                  message: Text("Please try again later"),
+                  dismissButton: .default(Text("Dismiss")))
         }
     }
 }
@@ -64,10 +72,14 @@ extension ResponseRecordingActionsView {
         session.requestRecordPermission { granted in
             self.hasMicrophoneAccess = granted
             if granted {
-                self.isPresentingNewRecordingView = true
-                self.audioBox.record(promptItemIdentifier: self.promptItemViewModel.identifier,
-                                     prompt: self.promptItemViewModel.prompt)
-                self.progressAnimator.startUpdateLoop()
+                do {
+                    self.isPresentingNewRecordingView = true
+                    try self.audioBox.record(promptItemIdentifier: self.promptItemViewModel.identifier,
+                                             prompt: self.promptItemViewModel.prompt)
+                    self.progressAnimator.startUpdateLoop()
+                } catch {
+                    self.showGenericErrorMessage = true
+                }
             } else {
                 displayRequestForMicophoneAccess = true
             }
@@ -75,10 +87,14 @@ extension ResponseRecordingActionsView {
     }
     
     private func playAudio() {
-        if self.audioBox.status == .stopped {            
-            self.audioBox.play(identifier: self.promptItemViewModel.identifier)
-            self.progressAnimator.startUpdateLoop()
-            self.isPresentingPlayRecordView = true
+        if self.audioBox.status == .stopped {
+            do {
+                try self.audioBox.play(identifier: self.promptItemViewModel.identifier)
+                self.progressAnimator.startUpdateLoop()
+                self.isPresentingPlayRecordView = true
+            } catch {
+                self.showGenericErrorMessage = true
+            }
         }
     }
     
@@ -88,10 +104,14 @@ extension ResponseRecordingActionsView {
         }
         
         if self.hasMicrophoneAccess {
-            self.isPresentingNewRecordingView = true
-            self.audioBox.record(promptItemIdentifier: self.promptItemViewModel.identifier,
-                                 prompt: self.promptItemViewModel.prompt)
-            self.progressAnimator.startUpdateLoop()
+            do {
+                self.isPresentingNewRecordingView = true
+                try self.audioBox.record(promptItemIdentifier: self.promptItemViewModel.identifier,
+                                     prompt: self.promptItemViewModel.prompt)
+                self.progressAnimator.startUpdateLoop()
+            } catch {
+                self.showGenericErrorMessage = true
+            }
         } else {
             self.requestMicrophoneAccess()
         }

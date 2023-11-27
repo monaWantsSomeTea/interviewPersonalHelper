@@ -21,6 +21,10 @@ struct PlayRecordingView: View {
     /// Audio has not been saved to CoreData.
     @Binding var hasUnsavedAudio: Bool
     
+    @State var showFailedToSaveAudioErrorMessage: Bool = false
+    @State var showFailedToDeleteAudioErrorMessage: Bool = false
+    @State var showGenericErrorMessage: Bool = false
+    
     var previousStatus: AudioStatus = .playing
     var playOrPauseActionImageName: String {
         switch self.audioBox.status {
@@ -77,11 +81,15 @@ struct PlayRecordingView: View {
                         case .paused:
                             self.audioBox.resumePlayback()
                         case .stopped:
-                            self.audioBox.play(identifier: self.promptItemViewModel.identifier)
-                            self.progressAnimator.startUpdateLoop()
+                            do {
+                                try self.audioBox.play(identifier: self.promptItemViewModel.identifier)
+                                self.progressAnimator.startUpdateLoop()
+                            } catch {
+                                self.showGenericErrorMessage = true
+                            }
                             break
                         case .recording:
-                            // TODO: Add user is currently recording message
+                            fatalError("Recording is in session.")
                             break
                   
                         }
@@ -110,7 +118,6 @@ struct PlayRecordingView: View {
             }
             .overlay(alignment: .bottomTrailing) {
                 Button {
-                    // TODO: delete audio file or temp audio file
                     self.audioBox.stopPlayback()
                     self.audioBox.status = .stopped
                     self.progressAnimator.stopUpdateTimer()
@@ -148,6 +155,21 @@ struct PlayRecordingView: View {
             .clipShape(Capsule(style: .circular))
             .padding([.top])
         }
+        .alert(isPresented: self.$showFailedToSaveAudioErrorMessage) {
+            Alert(title: Text("Something went wrong"),
+                  message: Text("Audio was not saved. Please try again later."),
+                  dismissButton: .default(Text("Dismiss")))
+        }
+        .alert(isPresented: self.$showFailedToDeleteAudioErrorMessage) {
+            Alert(title: Text("Something went wrong"),
+                  message: Text("Audio was not deleted. Please try again later."),
+                  dismissButton: .default(Text("Dismiss")))
+        }
+        .alert(isPresented: self.$showGenericErrorMessage) {
+            Alert(title: Text("Something went wrong"),
+                  message: Text("Please try again later"),
+                  dismissButton: .default(Text("Dismiss")))
+        }
     }
 }
 
@@ -157,8 +179,7 @@ extension PlayRecordingView {
             try self.audioBox.deleteAudio(identifier: self.promptItemViewModel.identifier,
                                           prompt: self.promptItemViewModel.prompt)
         } catch {
-            fatalError("Audio was not deleted")
-            // throw
+            self.showFailedToDeleteAudioErrorMessage = true
         }
     }
     
@@ -168,14 +189,14 @@ extension PlayRecordingView {
             try self.saveToCoreData(for: promptItem, with: audioDetails)
             self.hasUnsavedAudio = false
         } catch {
-            fatalError("Audio file was not saved to the document directory")
-            // TODO: Show toast
+            self.showFailedToSaveAudioErrorMessage = true
         }
     }
 
     /// Save the prompt item to core data when it does not contain the url to the audio file.
     private func saveToCoreData(for promptItem: PromptItemViewModel, with details: AudioBox.AudioDetails) throws {        
         let newPromptItem = PromptItem(context: self.viewContext)
+        var oldPromptItem: PromptItem?
         
         switch promptItem.model {
         case let promptItem as PromptItem:
@@ -188,8 +209,7 @@ extension PlayRecordingView {
             newPromptItem.prompt = promptItem.prompt
             newPromptItem.response = promptItem.response
          
-            
-            self.viewContext.delete(promptItem)
+            oldPromptItem = promptItem
         case let topInterviewQuestion as TopInterviewQuestion:
             newPromptItem.identifier = details.identifier
             newPromptItem.originialCategory = kTopInterviewQuestionCategory
@@ -201,10 +221,12 @@ extension PlayRecordingView {
 
         do {
             try self.viewContext.save()
+            if let oldPromptItem {
+                self.viewContext.delete(oldPromptItem)
+            }
         } catch let error as NSError {
-            // TODO: Make a toast or alert
-            print("Could not save. \(error), \(error.userInfo)")
-//            throw
+            self.viewContext.delete(newPromptItem)
+            throw error
         }
     }
 }
