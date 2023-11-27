@@ -60,7 +60,7 @@ struct SaveOrCancelResponseHeaderView: View {
 extension SaveOrCancelResponseHeaderView {
     /// Save to Core Data
     private func save(_ inputResponse: Binding<String>, to question: PromptItemViewModel) {
-        var newPromptItem = PromptItem(context: self.viewContext)
+        let newPromptItem = PromptItem(context: self.viewContext)
         var oldPromptItem: PromptItem?
         
         switch question.model {
@@ -86,10 +86,11 @@ extension SaveOrCancelResponseHeaderView {
         newPromptItem.response = inputResponse.wrappedValue
 
         do {
-            try self.viewContext.save()
             if let oldPromptItem {
                 self.viewContext.delete(oldPromptItem)
             }
+            
+            try self.viewContext.save()
         } catch {
             self.showErrorMessage = true
             self.viewContext.delete(newPromptItem)

@@ -220,10 +220,11 @@ extension PlayRecordingView {
         }
 
         do {
-            try self.viewContext.save()
             if let oldPromptItem {
                 self.viewContext.delete(oldPromptItem)
             }
+            
+            try self.viewContext.save()
         } catch let error as NSError {
             self.viewContext.delete(newPromptItem)
             throw error
