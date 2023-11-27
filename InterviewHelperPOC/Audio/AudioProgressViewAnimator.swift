@@ -50,6 +50,15 @@ class AudioProgressViewAnimator: ObservableObject {
         }
     }
     
+    func updateAudioPlayerTimerImmediately() {
+        Task(priority: .high) {
+            await MainActor.run {
+                self.currentTimeFormatted = Self.formattedTime(self.audioBox.audioPlayer?.currentTime ?? 0)
+                self.currentTime = self.audioBox.audioPlayer?.currentTime ?? 0
+            }
+        }
+    }
+    
     func stopUpdateTimer() {
         self.updateTimer?.invalidate()
         self.updateTimer = nil

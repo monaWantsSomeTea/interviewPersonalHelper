@@ -189,12 +189,26 @@ class AudioBox: NSObject, ObservableObject {
         audioPlayer.currentTime = audioPlayer.currentTime - time
     }
     
-    func fastForward(by time: TimeInterval) {
+    /// Fast forward the current time by a set amount of time in seconds and
+    /// stop the audio and audio progress animator when the expected time is at or over the total duration.
+    ///
+    /// - parameter time: The offset of time in seconds to fast forward.
+    ///
+    /// - returns: Whether update the animation for the timer.d
+    func fastForward(by time: TimeInterval) -> Bool {
         guard let audioPlayer = self.audioPlayer else {
-            return
+            fatalError("No audio player found")
         }
         
-        audioPlayer.currentTime = audioPlayer.currentTime + time
+        let updatedCurrentTime = audioPlayer.currentTime + time
+        if updatedCurrentTime < audioPlayer.duration {
+            audioPlayer.currentTime = updatedCurrentTime
+            return false
+        } else {
+            self.stopPlayback()
+            audioPlayer.currentTime = audioPlayer.duration - 0.1
+            return true
+        }
     }
     
     func resumePlayback() {

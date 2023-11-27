@@ -94,7 +94,9 @@ struct PlayRecordingView: View {
                     }
                     
                     Button {
-                        self.audioBox.fastForward(by: 5)
+                        if self.audioBox.fastForward(by: 5) {
+                            self.progressAnimator.updateAudioPlayerTimerImmediately()
+                        }
                     } label: {
                         Image(systemName: "forward.circle")
                             .resizable()
