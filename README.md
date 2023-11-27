@@ -15,7 +15,7 @@ A mobile application empowering users to enhance speaking skills, refine answers
 
 ## Features:
 
-### Milestone 1.1: [Fixing bugs]
+### Milestone 1.1: [Completed]
 #### Display list of top interview questions
 | Add, edit, and save notes |
 |-|
