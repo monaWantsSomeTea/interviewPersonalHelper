@@ -85,6 +85,7 @@ class AudioBox: NSObject, ObservableObject {
         
         if let data = fileManager.contents(atPath: unsavedFileURL.path()), !data.isEmpty {
             self.hasStoredAudio = true
+            self.urlForTemporaryDirectoryPath = unsavedFileURL
         } else if let data = fileManager.contents(atPath: savedFileURL.path()), !data.isEmpty {
             self.hasStoredAudio = true
         } else {
@@ -236,7 +237,6 @@ class AudioBox: NSObject, ObservableObject {
             try self.deleteTemporaryAudioFileURL(url: temporaryFileURL)
         } else if FileManager.default.fileExists(atPath: savedFileURL.path()) {
             try FileManager.default.removeItem(at: savedFileURL)
-            self.urlForDocumentDirectoryPath = nil
         }
         
         // No audio file stored on device.
