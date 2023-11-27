@@ -16,7 +16,6 @@ class AudioBox: NSObject, ObservableObject {
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
     var urlForTemporaryDirectoryPath: URL?
-    var urlForDocumentDirectoryPath: URL?
     
     var totalDurationForPlayer: TimeInterval {
         self.audioPlayer?.duration ?? 0.0
@@ -105,11 +104,8 @@ class AudioBox: NSObject, ObservableObject {
             
             let identifier: UUID = promptItem.identifier ?? UUID()
             let url = self.getURLWithinDocumentDirectory(with: identifier)
-            self.urlForDocumentDirectoryPath = url
-            
-            if FileManager.default.fileExists(atPath: urlForTemporaryDirectoryPath.path()) ||
-                FileManager.default.fileExists(atPath: url.path())
-            {
+        
+            if FileManager.default.fileExists(atPath: urlForTemporaryDirectoryPath.path()) {
                 do {
                     try data.write(to: url, options: [.atomic])
                     try self.deleteTemporaryAudioFileURL(url: urlForTemporaryDirectoryPath)
