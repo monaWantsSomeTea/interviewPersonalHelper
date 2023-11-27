@@ -18,7 +18,7 @@ struct PromptAndResponseView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Binding var question: PromptItemViewModel
     
-    @ObservedObject var audioBox = AudioBox()
+    @ObservedObject var audioBox: AudioBox
     @ObservedObject var progressAnimator: AudioProgressViewAnimator
     @State var isPresentingNewRecordingView: Bool = false
     @State var isPresentingPlayRecordView: Bool = false

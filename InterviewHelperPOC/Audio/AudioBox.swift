@@ -11,7 +11,7 @@ import AVFoundation
 class AudioBox: NSObject, ObservableObject {
     @Published var status: AudioStatus = .stopped
     /// Audio has been stored in file in either the temporary or document directory.
-    @Published var hasStoredAudio: Bool = false
+    @Published var hasStoredAudio: Bool = true
     
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
@@ -223,6 +223,7 @@ class AudioBox: NSObject, ObservableObject {
                 return
             }
             
+            // No audio is stored when the identifier for the prompt item does not exisit.
             self.hasStoredAudio = false
             return
         }
