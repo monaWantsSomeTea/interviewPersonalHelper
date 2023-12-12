@@ -18,15 +18,13 @@ struct PlayRecordingView: View {
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var totalRecordTime: CGFloat
     @Binding var promptItemViewModel: PromptItemViewModel
-    /// Audio has not been saved to CoreData.
-    @Binding var hasUnsavedAudio: Bool
+    /// Audio is stored temporarily and not saved permanently. 
+    @Binding var hasStoredUnsavedAudio: Bool
     
-    @State var showFailedToSaveAudioErrorMessage: Bool = false
-    @State var showFailedToDeleteAudioErrorMessage: Bool = false
-    @State var showGenericErrorMessage: Bool = false
-    
-    var previousStatus: AudioStatus = .playing
-    var playOrPauseActionImageName: String {
+    @State var audioError: AudioError = .none
+    @State var hasAudioError: Bool = false
+
+    private var playOrPauseActionImageName: String {
         switch self.audioBox.status {
         case .playing:
             return "pause.fill"
@@ -35,10 +33,8 @@ struct PlayRecordingView: View {
         }
     }
     
-    var totalDuration: String {
-        let minutes = Int(self.audioBox.totalDurationForPlayer / 60) % 60
-        let seconds = Int(self.audioBox.totalDurationForPlayer) % 60
-        return String(format: "%02i:%02i", arguments: [minutes, seconds])
+    private var totalDuration: String {
+        AudioBox.format(time: self.audioBox.totalDurationForPlayer)
     }
     
     var body: some View {
@@ -75,25 +71,7 @@ struct PlayRecordingView: View {
                     }
                     
                     Button {
-                        switch self.audioBox.status {
-                        case .playing:
-                            self.audioBox.pausePlayback()
-                        case .paused:
-                            self.audioBox.resumePlayback()
-                        case .stopped:
-                            do {
-                                try self.audioBox.play(identifier: self.promptItemViewModel.identifier)
-                                self.progressAnimator.startUpdateLoop()
-                            } catch {
-                                self.showGenericErrorMessage = true
-                            }
-                            break
-                        case .recording:
-                            fatalError("Recording is in session.")
-                            break
-                  
-                        }
-                        
+                        self.audioControlAction()
                     } label: {
                         Image(systemName: self.playOrPauseActionImageName)
                             .resizable()
@@ -118,13 +96,7 @@ struct PlayRecordingView: View {
             }
             .overlay(alignment: .bottomTrailing) {
                 Button {
-                    self.audioBox.stopPlayback()
-                    self.audioBox.status = .stopped
-                    self.progressAnimator.stopUpdateTimer()
-                    
-                    self.deleteAudio()
-                    
-                    self.isPresentingPlayRecordView = false
+                    self.deleteAndDismiss()
                 } label: {
                     Image(systemName: "trash.fill")
                         .resizable()
@@ -134,17 +106,9 @@ struct PlayRecordingView: View {
             }
             
             Button {
-                self.audioBox.stopPlayback()
-                self.audioBox.status = .stopped
-                self.progressAnimator.stopUpdateTimer()
-                self.isPresentingPlayRecordView = false
-                
-                if self.hasUnsavedAudio {
-                    self.saveRecording(for: self.promptItemViewModel)
-                }
-             
+                self.dismissAndSaveIfNeeded()
             } label: {
-                Text(self.hasUnsavedAudio ? "Save" : "Dismiss")
+                Text(self.hasStoredUnsavedAudio ? "Save" : "Dismiss")
                     .foregroundColor(.white)
                     .padding([.horizontal], 16)
                     .padding([.vertical], 6)
@@ -155,46 +119,84 @@ struct PlayRecordingView: View {
             .clipShape(Capsule(style: .circular))
             .padding([.top])
         }
-        .alert(isPresented: self.$showFailedToSaveAudioErrorMessage) {
-            Alert(title: Text("Something went wrong"),
-                  message: Text("Audio was not saved. Please try again later."),
-                  dismissButton: .default(Text("Dismiss")))
-        }
-        .alert(isPresented: self.$showFailedToDeleteAudioErrorMessage) {
-            Alert(title: Text("Something went wrong"),
-                  message: Text("Audio was not deleted. Please try again later."),
-                  dismissButton: .default(Text("Dismiss")))
-        }
-        .alert(isPresented: self.$showGenericErrorMessage) {
-            Alert(title: Text("Something went wrong"),
-                  message: Text("Please try again later"),
-                  dismissButton: .default(Text("Dismiss")))
+        .onChange(of: self.audioError, perform: { newValue in
+            if newValue != .none {
+                self.hasAudioError = true
+            }
+        })
+        .alert(isPresented: self.$hasAudioError) {
+            Alert(title: Text(self.audioError.title),
+                  message: Text(self.audioError.message),
+                  dismissButton: .default(Text("Dismiss"))
+            {
+                self.audioError = .none
+            })
         }
     }
 }
 
 extension PlayRecordingView {
+    private func audioControlAction() {
+        switch self.audioBox.status {
+        case .playing:
+            self.audioBox.pausePlayback()
+        case .paused:
+            self.audioBox.resumePlayback()
+        case .stopped:
+            do {
+                try self.audioBox.play(identifier: self.promptItemViewModel.identifier)
+                self.progressAnimator.startUpdateLoop()
+            } catch {
+                self.audioError = .genericError
+            }
+            break
+        case .recording:
+            fatalError("Recording is in session.")
+            break
+        }
+    }
+    
+    private func dismissAndSaveIfNeeded() {
+        self.audioBox.stopPlayback()
+        self.audioBox.status = .stopped
+        self.progressAnimator.stopUpdateTimer()
+        self.isPresentingPlayRecordView = false
+        
+        if self.hasStoredUnsavedAudio {
+            self.saveRecording(for: self.promptItemViewModel)
+        }
+    }
+    
+    private func deleteAndDismiss() {
+        self.audioBox.stopPlayback()
+        self.audioBox.status = .stopped
+        self.progressAnimator.stopUpdateTimer()
+        
+        self.deleteAudio()
+        self.isPresentingPlayRecordView = false
+    }
+
     private func deleteAudio() {
         do {
             try self.audioBox.deleteAudio(identifier: self.promptItemViewModel.identifier,
                                           prompt: self.promptItemViewModel.prompt)
         } catch {
-            self.showFailedToDeleteAudioErrorMessage = true
+            self.audioError = .failedToDelete
         }
     }
     
     private func saveRecording(for promptItem: PromptItemViewModel) {
         do {
-            let audioDetails = try self.audioBox.writeAudioToDocumentsDirectory(for: promptItem)
-            try self.saveToCoreData(for: promptItem, with: audioDetails)
-            self.hasUnsavedAudio = false
+            let identifier = try self.audioBox.writeAudioToDocumentsDirectory(for: promptItem)
+            try self.saveToCoreData(for: promptItem, with: identifier)
+            self.hasStoredUnsavedAudio = false
         } catch {
-            self.showFailedToSaveAudioErrorMessage = true
+            self.audioError = .failedToSave
         }
     }
 
     /// Save the prompt item to core data when it does not contain the url to the audio file.
-    private func saveToCoreData(for promptItem: PromptItemViewModel, with details: AudioBox.AudioDetails) throws {        
+    private func saveToCoreData(for promptItem: PromptItemViewModel, with identifier: UUID) throws {
         let newPromptItem = PromptItem(context: self.viewContext)
         var oldPromptItem: PromptItem?
         
@@ -211,7 +213,7 @@ extension PlayRecordingView {
          
             oldPromptItem = promptItem
         case let topInterviewQuestion as TopInterviewQuestion:
-            newPromptItem.identifier = details.identifier
+            newPromptItem.identifier = identifier
             newPromptItem.originialCategory = kTopInterviewQuestionCategory
             newPromptItem.originalId = String(topInterviewQuestion.id)
             newPromptItem.prompt = topInterviewQuestion.prompt
@@ -238,9 +240,14 @@ extension View {
     }
 }
 
-//struct PlayRecordingView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let audioBox = AudioBox()
-//        return PlayRecordingView(audioBox: audioBox, progressAnimator: AudioProgressViewAnimator(audioBox: audioBox), isPresentingPlayRecordView: .constant(true), totalRecordTime: .constant(10))
-//    }
-//}
+struct PlayRecordingView_Previews: PreviewProvider {
+    static var previews: some View {
+        let audioBox = AudioBox()
+        PlayRecordingView(audioBox: audioBox,
+                          progressAnimator: AudioProgressViewAnimator(audioBox: audioBox),
+                          isPresentingPlayRecordView: .constant(true),
+                          totalRecordTime: .constant(10),
+                          promptItemViewModel: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem)),
+                          hasStoredUnsavedAudio: .constant(false))
+    }
+}

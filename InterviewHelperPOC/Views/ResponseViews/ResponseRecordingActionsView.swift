@@ -119,22 +119,21 @@ extension ResponseRecordingActionsView {
 }
 
 
-//struct ResponseRecordingActionsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let audioBox = AudioBox()
-//        ResponseRecordingActionsView(audioBox: audioBox,
-//                                     progressAnimator: AudioProgressViewAnimator(audioBox: audioBox),
-//                                     isPresentingPlayRecordView: .constant(true),
-//                                     isPresentingNewRecordingView: .constant(true),
-//                                     promptItemViewModel: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem)),
-//                                     hasStoredAudio: .constant(false))
-//        
-//        PromptAndResponseView(question:
-//            Binding(
-//                get: { TopInterviewQuestions().questions[0] },
-//                set: { _ in }
-//            )
-//        )
-//        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//    }
-//}
+struct ResponseRecordingActionsView_Previews: PreviewProvider {
+    static var previews: some View {
+        let audioBox = AudioBox()
+        ResponseRecordingActionsView(audioBox: audioBox,
+                                     progressAnimator: AudioProgressViewAnimator(audioBox: audioBox),
+                                     isPresentingPlayRecordView: .constant(true),
+                                     isPresentingNewRecordingView: .constant(true),
+                                     promptItemViewModel: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem)))
+        
+        PromptAndResponseView(question:
+            Binding(
+                get: { TopInterviewQuestions().questions[0] },
+                set: { _ in }
+            )
+        )
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}

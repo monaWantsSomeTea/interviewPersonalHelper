@@ -13,12 +13,10 @@ struct CreateNewRecordingView: View {
      
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var isPresentingNewRecordingView: Bool
-    /// Audio has not been saved to CoreData.
-    @Binding var hasUnsavedAudio: Bool
+    /// Audio is stored temporarily and not saved permanently. 
+    @Binding var hasStoredUnsavedAudio: Bool
     
-    var totalRecordTime: String {
-        return AudioBox.formattedTime(self.audioBox.audioRecorder?.currentTime ?? 0)
-    }
+    var totalRecordTime: String { AudioBox.format(time: self.audioBox.currentTimeForRecorder) }
     
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
@@ -32,7 +30,7 @@ struct CreateNewRecordingView: View {
             Button {
                 self.audioBox.stopRecording()
                 self.progressAnimator.stopUpdateTimer()
-                self.hasUnsavedAudio = true
+                self.hasStoredUnsavedAudio = true
                 self.isPresentingNewRecordingView = false
                 self.isPresentingPlayRecordView = true
             } label: {
@@ -57,6 +55,6 @@ struct CreateNewRecordingView_Previews: PreviewProvider {
                                progressAnimator: AudioProgressViewAnimator(audioBox: audioBox),
                                isPresentingPlayRecordView: .constant(true),
                                isPresentingNewRecordingView: .constant(true),
-                               hasUnsavedAudio: .constant(false))
+                               hasStoredUnsavedAudio: .constant(false))
     }
 }

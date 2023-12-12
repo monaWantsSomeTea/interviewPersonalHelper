@@ -38,23 +38,27 @@ class AudioProgressViewAnimator: ObservableObject {
         if self.audioBox.status == .playing || self.audioBox.status == .paused {
             if CFAbsoluteTimeGetCurrent() - self.previousUpdateTimeForPlayer > 0.1 {
                 self.previousUpdateTimeForPlayer = CFAbsoluteTimeGetCurrent()
-                self.currentTimeFormatted = Self.formattedTime(self.audioBox.currentTimeForPlayer)
+                self.currentTimeFormatted = AudioBox.format(time: self.audioBox.currentTimeForPlayer)
                 self.currentTime = self.audioBox.currentTimeForPlayer
             }
         } else if self.audioBox.status == .recording {
             if CFAbsoluteTimeGetCurrent() - self.previousUpdateTimeForRecorder > 0.1 {
                 self.previousUpdateTimeForRecorder = CFAbsoluteTimeGetCurrent()
-                self.currentTimeFormatted = Self.formattedTime(self.audioBox.audioRecorder?.currentTime ?? 0)
-                self.currentTime = self.audioBox.audioRecorder?.currentTime ?? 0
+                self.currentTimeFormatted = AudioBox.format(time: self.audioBox.currentTimeForRecorder)
+                self.currentTime = self.audioBox.currentTimeForRecorder
             }
         }
     }
     
     func updateAudioPlayerTimerImmediately() {
-        Task(priority: .high) {
+        Task(priority: .high) { [weak self] in
+            guard let self else {
+                fatalError("Class object does not exist.")
+            }
+            
             await MainActor.run {
-                self.currentTimeFormatted = Self.formattedTime(self.audioBox.audioPlayer?.currentTime ?? 0)
-                self.currentTime = self.audioBox.audioPlayer?.currentTime ?? 0
+                self.currentTimeFormatted = AudioBox.format(time: self.audioBox.currentTimeForPlayer)
+                self.currentTime = self.audioBox.currentTimeForPlayer
             }
         }
     }
@@ -65,11 +69,5 @@ class AudioProgressViewAnimator: ObservableObject {
         self.currentTimeFormatted = "00:00"
         self.currentTime = 0.0
         
-    }
-    
-    static func formattedTime(_ time: TimeInterval) -> String {
-        let minutes = Int(time/60) % 60
-        let seconds = Int(time) % 60
-        return String(format: "%02i:%02i", arguments: [minutes, seconds])
     }
 }

@@ -22,8 +22,8 @@ struct PromptAndResponseView: View {
     @ObservedObject var progressAnimator: AudioProgressViewAnimator
     @State var isPresentingNewRecordingView: Bool = false
     @State var isPresentingPlayRecordView: Bool = false
-    /// Audio has not been saved to CoreData.
-    @State var hasUnsavedAudio: Bool = false
+    /// Audio is stored temporarily and not saved permanently. 
+    @State var hasStoredUnsavedAudio: Bool = false
     
     init(question: Binding<PromptItemViewModel>) {
         self._question = question
@@ -59,7 +59,7 @@ struct PromptAndResponseView: View {
                                        progressAnimator: self.progressAnimator,
                                        isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
                                        isPresentingNewRecordingView: self.$isPresentingNewRecordingView,
-                                       hasUnsavedAudio: self.$hasUnsavedAudio)
+                                       hasStoredUnsavedAudio: self.$hasStoredUnsavedAudio)
                     .presentationDetents([.fraction(0.2)])
                     .interactiveDismissDisabled(true)
             }
@@ -69,7 +69,7 @@ struct PromptAndResponseView: View {
                                   isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
                                   totalRecordTime: .constant(10),
                                   promptItemViewModel: self.$question,
-                                  hasUnsavedAudio: self.$hasUnsavedAudio)
+                                  hasStoredUnsavedAudio: self.$hasStoredUnsavedAudio)
                         .presentationDetents([.fraction(0.35)])
                         .interactiveDismissDisabled(true)
                         .environment(\.managedObjectContext, viewContext)
@@ -78,14 +78,13 @@ struct PromptAndResponseView: View {
     }
 }
 
-//struct QuestionView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PromptAndResponseView(question:
-//            Binding(
-//                get: { TopInterviewQuestions().questions[0] },
-//                set: { _ in }
-//            )
-//        )
-//        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//    }
-//}
+struct QuestionView_Previews: PreviewProvider {
+    static var previews: some View {
+        let audioBox = AudioBox()
+        PromptAndResponseView(
+            question: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem))
+        )
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}
+
