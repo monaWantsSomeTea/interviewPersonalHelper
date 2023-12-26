@@ -180,6 +180,8 @@ extension PlayRecordingView {
         do {
             try self.audioBox.deleteAudio(identifier: self.promptItemViewModel.identifier,
                                           prompt: self.promptItemViewModel.prompt)
+            
+            self.hasStoredUnsavedAudio = false
         } catch {
             self.audioError = .failedToDelete
         }
