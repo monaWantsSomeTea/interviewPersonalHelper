@@ -18,6 +18,24 @@ extension AudioBox {
         }
     }
     
+    private func update(hasTemporaryAudioFile: Bool) {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.hasTemporaryAudio = hasTemporaryAudioFile
+        }
+    }
+    
+    func checkForTemporaryAudio(promptItem: PromptItemViewModel) {
+        let temporaryAudioURL = self.getTemporaryURL(identifier: promptItem.identifier,
+                                                     prompt: promptItem.prompt)
+        
+        if FileManager.default.fileExists(atPath: temporaryAudioURL.path()) {
+            self.update(hasTemporaryAudioFile: true)
+        } else {
+            self.update(hasTemporaryAudioFile: false)
+        }
+    }
+    
     func checkForStoredAudio(identifier: UUID?, prompt: String) {
         // Assign the permanent url when the prompt identifier exists
         // and Core data contains data for this Prompt item
@@ -33,8 +51,7 @@ extension AudioBox {
         
         if let data = fileManager.contents(atPath: unsavedFileURL.path()), !data.isEmpty {
             self.hasStoredAudio = true
-            self.urlForTemporaryDirectoryPath = unsavedFileURL
-        } else if let data = fileManager.contents(atPath: savedFileURL.path()), !data.isEmpty {
+        } else if let savedFileURL, let data = fileManager.contents(atPath: savedFileURL.path()), !data.isEmpty {
             self.hasStoredAudio = true
         } else {
             self.hasStoredAudio = false
@@ -42,17 +59,13 @@ extension AudioBox {
     }
     
     func writeAudioToDocumentsDirectory(for promptItem: PromptItemViewModel) throws -> UUID {
-        guard let urlForTemporaryDirectoryPath = self.urlForTemporaryDirectoryPath else {
-            fatalError("Temporary url not found")
-        }
-        
-        let data = try Data(contentsOf: urlForTemporaryDirectoryPath)
-        
+        let urlForTemporaryDirectoryPath = self.getTemporaryURL(identifier: promptItem.identifier,
+                                                                prompt: promptItem.prompt)
         
         let identifier: UUID = promptItem.identifier ?? UUID()
         let url = self.getURLWithinDocumentDirectory(with: identifier)
         
-        if FileManager.default.fileExists(atPath: urlForTemporaryDirectoryPath.path()) {
+        if let url, let data = FileManager.default.contents(atPath: urlForTemporaryDirectoryPath.path()) {
             try data.write(to: url, options: [.atomic])
             try self.deleteTemporaryAudioFileURL(url: urlForTemporaryDirectoryPath)
         } else {
@@ -82,19 +95,18 @@ extension AudioBox {
         
         if FileManager.default.fileExists(atPath: temporaryFileURL.path())  {
             try self.deleteTemporaryAudioFileURL(url: temporaryFileURL)
-        } else if FileManager.default.fileExists(atPath: savedFileURL.path()) {
+        } else if let savedFileURL, FileManager.default.fileExists(atPath: savedFileURL.path()) {
             try FileManager.default.removeItem(at: savedFileURL)
         }
         
         // No audio file stored on device.
-        if !FileManager.default.fileExists(atPath: savedFileURL.path()) {
+        if let savedFileURL, !FileManager.default.fileExists(atPath: savedFileURL.path()) {
             self.hasStoredAudio = false
         }
     }
     
     private func deleteTemporaryAudioFileURL(url: URL) throws {
         try FileManager.default.removeItem(at: url)
-        self.urlForTemporaryDirectoryPath = nil
     }
 }
     
@@ -121,19 +133,16 @@ extension AudioBox {
         self.hasStoredAudio = true
     }
     
-    func play(identifier: UUID?) throws {
-        let url: URL
+    func play(identifier: UUID?, prompt: String) throws {
+
+        let temporaryURL = self.getTemporaryURL(identifier: identifier, prompt: prompt)
+        let documentURL = self.getURLWithinDocumentDirectory(with: identifier)
         
-        if let urlForTemporaryDirectoryPath = self.urlForTemporaryDirectoryPath {
-            url = urlForTemporaryDirectoryPath
-        } else if let identifier {
-            url = self.getURLWithinDocumentDirectory(with: identifier)
-        } else {
-            fatalError("No url found")
-        }
-        
-        if FileManager.default.fileExists(atPath: url.path()) {
-            self.audioPlayer = try AVAudioPlayer(contentsOf: url)
+        // Get temporary url path if it exists first
+        if FileManager.default.fileExists(atPath: temporaryURL.path()) {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: temporaryURL)
+        } else if let documentURL, FileManager.default.fileExists(atPath: documentURL.path()) {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: documentURL)
         } else {
             fatalError("Can not play. Url to file is not valid.")
         }
@@ -203,7 +212,11 @@ extension AudioBox {
     /// - parameter identifier: The unique identifier for the prompt item.
     ///
     /// - return: The URL to the file containing the saved audio.
-    private func getURLWithinDocumentDirectory(with identifier: UUID) -> URL {
+    private func getURLWithinDocumentDirectory(with identifier: UUID?) -> URL? {
+        guard let identifier else {
+            return nil
+        }
+        
         let fileManager = FileManager.default
         let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
         let documentDirectoryURL = urls[0]
@@ -240,7 +253,6 @@ extension AudioBox {
     ///
     private func setupRecorder(promptItemIdentifier: UUID?, prompt: String) throws {
         let url = self.getTemporaryURL(identifier: promptItemIdentifier, prompt: prompt)
-        self.urlForTemporaryDirectoryPath = url
         
         let recordSettings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatLinearPCM),

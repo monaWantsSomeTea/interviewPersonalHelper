@@ -22,8 +22,6 @@ struct PromptAndResponseView: View {
     @ObservedObject var progressAnimator: AudioProgressViewAnimator
     @State var isPresentingNewRecordingView: Bool = false
     @State var isPresentingPlayRecordView: Bool = false
-    /// Audio is stored temporarily and not saved permanently. 
-    @State var hasStoredUnsavedAudio: Bool = false
     
     init(question: Binding<PromptItemViewModel>) {
         self._question = question
@@ -58,8 +56,7 @@ struct PromptAndResponseView: View {
                 CreateNewRecordingView(audioBox: self.audioBox,
                                        progressAnimator: self.progressAnimator,
                                        isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
-                                       isPresentingNewRecordingView: self.$isPresentingNewRecordingView,
-                                       hasStoredUnsavedAudio: self.$hasStoredUnsavedAudio)
+                                       isPresentingNewRecordingView: self.$isPresentingNewRecordingView)
                     .presentationDetents([.fraction(0.2)])
                     .interactiveDismissDisabled(true)
             }
@@ -68,8 +65,7 @@ struct PromptAndResponseView: View {
                                   progressAnimator: self.progressAnimator,
                                   isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
                                   totalRecordTime: .constant(10),
-                                  promptItemViewModel: self.$question,
-                                  hasStoredUnsavedAudio: self.$hasStoredUnsavedAudio)
+                                  promptItemViewModel: self.$question)
                         .presentationDetents([.fraction(0.35)])
                         .interactiveDismissDisabled(true)
                         .environment(\.managedObjectContext, viewContext)
@@ -80,7 +76,6 @@ struct PromptAndResponseView: View {
 
 struct QuestionView_Previews: PreviewProvider {
     static var previews: some View {
-        let audioBox = AudioBox()
         PromptAndResponseView(
             question: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem))
         )

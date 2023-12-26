@@ -18,8 +18,6 @@ struct PlayRecordingView: View {
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var totalRecordTime: CGFloat
     @Binding var promptItemViewModel: PromptItemViewModel
-    /// Audio is stored temporarily and not saved permanently. 
-    @Binding var hasStoredUnsavedAudio: Bool
     
     @State var audioError: AudioError = .none
     @State var hasAudioError: Bool = false
@@ -108,7 +106,7 @@ struct PlayRecordingView: View {
             Button {
                 self.dismissAndSaveIfNeeded()
             } label: {
-                Text(self.hasStoredUnsavedAudio ? "Save" : "Dismiss")
+                Text(self.audioBox.hasTemporaryAudio ? "Save" : "Dismiss")
                     .foregroundColor(.white)
                     .padding([.horizontal], 16)
                     .padding([.vertical], 6)
@@ -118,6 +116,9 @@ struct PlayRecordingView: View {
             .background(.blue)
             .clipShape(Capsule(style: .circular))
             .padding([.top])
+        }
+        .onAppear {
+            self.audioBox.checkForTemporaryAudio(promptItem: self.promptItemViewModel)
         }
         .onChange(of: self.audioError, perform: { newValue in
             if newValue != .none {
@@ -144,7 +145,8 @@ extension PlayRecordingView {
             self.audioBox.resumePlayback()
         case .stopped:
             do {
-                try self.audioBox.play(identifier: self.promptItemViewModel.identifier)
+                try self.audioBox.play(identifier: self.promptItemViewModel.identifier,
+                                       prompt: self.promptItemViewModel.prompt)
                 self.progressAnimator.startUpdateLoop()
             } catch {
                 self.audioError = .genericError
@@ -162,7 +164,7 @@ extension PlayRecordingView {
         self.progressAnimator.stopUpdateTimer()
         self.isPresentingPlayRecordView = false
         
-        if self.hasStoredUnsavedAudio {
+        if self.audioBox.hasTemporaryAudio {
             self.saveRecording(for: self.promptItemViewModel)
         }
     }
@@ -180,8 +182,6 @@ extension PlayRecordingView {
         do {
             try self.audioBox.deleteAudio(identifier: self.promptItemViewModel.identifier,
                                           prompt: self.promptItemViewModel.prompt)
-            
-            self.hasStoredUnsavedAudio = false
         } catch {
             self.audioError = .failedToDelete
         }
@@ -191,7 +191,6 @@ extension PlayRecordingView {
         do {
             let identifier = try self.audioBox.writeAudioToDocumentsDirectory(for: promptItem)
             try self.saveToCoreData(for: promptItem, with: identifier)
-            self.hasStoredUnsavedAudio = false
         } catch {
             self.audioError = .failedToSave
         }
@@ -249,7 +248,6 @@ struct PlayRecordingView_Previews: PreviewProvider {
                           progressAnimator: AudioProgressViewAnimator(audioBox: audioBox),
                           isPresentingPlayRecordView: .constant(true),
                           totalRecordTime: .constant(10),
-                          promptItemViewModel: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem)),
-                          hasStoredUnsavedAudio: .constant(false))
+                          promptItemViewModel: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem)))
     }
 }

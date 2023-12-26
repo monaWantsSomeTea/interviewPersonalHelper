@@ -89,7 +89,8 @@ extension ResponseRecordingActionsView {
     private func playAudio() {
         if self.audioBox.status == .stopped {
             do {
-                try self.audioBox.play(identifier: self.promptItemViewModel.identifier)
+                try self.audioBox.play(identifier: self.promptItemViewModel.identifier,
+                                       prompt: self.promptItemViewModel.prompt)
                 self.progressAnimator.startUpdateLoop()
                 self.isPresentingPlayRecordView = true
             } catch {

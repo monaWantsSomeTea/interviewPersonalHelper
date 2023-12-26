@@ -12,6 +12,8 @@ class AudioBox: NSObject, ObservableObject {
     @Published var status: AudioStatus = .stopped
     /// Audio has been stored in file in either the temporary or document directory.
     @Published var hasStoredAudio: Bool = true
+    /// Audio is stored temporarily and not saved permanently.
+    @Published var hasTemporaryAudio: Bool = false
 
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
@@ -20,8 +22,6 @@ class AudioBox: NSObject, ObservableObject {
     var currentTimeForPlayer: TimeInterval { self.audioPlayer?.currentTime ?? 0.0 }
     
     var currentTimeForRecorder: TimeInterval { self.audioRecorder?.currentTime ?? 0 }
-    
-    var urlForTemporaryDirectoryPath: URL?
     
     override init() {
         super.init()
