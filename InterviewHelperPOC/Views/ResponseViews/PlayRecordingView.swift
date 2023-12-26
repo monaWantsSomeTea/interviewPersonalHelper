@@ -158,7 +158,7 @@ extension PlayRecordingView {
     
     private func dismissAndSaveIfNeeded() {
         self.audioBox.stopPlayback()
-        self.audioBox.status = .stopped
+        self.audioBox.update(status: .stopped)
         self.progressAnimator.stopUpdateTimer()
         self.isPresentingPlayRecordView = false
         
@@ -169,7 +169,7 @@ extension PlayRecordingView {
     
     private func deleteAndDismiss() {
         self.audioBox.stopPlayback()
-        self.audioBox.status = .stopped
+        self.audioBox.update(status: .stopped)
         self.progressAnimator.stopUpdateTimer()
         
         self.deleteAudio()

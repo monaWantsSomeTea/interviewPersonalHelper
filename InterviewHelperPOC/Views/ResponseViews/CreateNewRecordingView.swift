@@ -16,8 +16,6 @@ struct CreateNewRecordingView: View {
     /// Audio is stored temporarily and not saved permanently. 
     @Binding var hasStoredUnsavedAudio: Bool
     
-    var totalRecordTime: String { AudioBox.format(time: self.audioBox.currentTimeForRecorder) }
-    
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
             Spacer(minLength: 20)
@@ -43,7 +41,7 @@ struct CreateNewRecordingView: View {
         }
         .onDisappear {
             self.progressAnimator.stopUpdateTimer()
-            self.audioBox.status = .stopped
+            self.audioBox.update(status: .stopped)
         }
     }
 }

@@ -11,6 +11,13 @@ import Foundation
 // - MARK: Helper functions
 
 extension AudioBox {
+    func update(status: AudioStatus) {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.status = status
+        }
+    }
+    
     func checkForStoredAudio(identifier: UUID?, prompt: String) {
         // Assign the permanent url when the prompt identifier exists
         // and Core data contains data for this Prompt item
@@ -96,7 +103,7 @@ extension AudioBox {
 extension AudioBox {
     func record(promptItemIdentifier: UUID?, prompt: String) throws {
         try self.setupRecorder(promptItemIdentifier: promptItemIdentifier, prompt: prompt)
-        self.status = .recording
+        self.update(status: .recording)
         guard let audioRecorder = self.audioRecorder else {
             fatalError("No recorder was found.")
         }
@@ -105,7 +112,7 @@ extension AudioBox {
     }
     
     func stopRecording() {
-        self.status = .stopped
+        self.update(status: .stopped)
         guard let audioRecorder = self.audioRecorder else {
             fatalError("No recorder was found.")
         }
@@ -138,7 +145,7 @@ extension AudioBox {
         audioPlayer.delegate = self
         if audioPlayer.duration > 0.0 {
             audioPlayer.play()
-            self.status = .playing
+            self.update(status: .playing)
         }
     }
     
@@ -174,17 +181,17 @@ extension AudioBox {
     
     func resumePlayback() {
         self.audioPlayer?.play()
-        self.status = .playing
+        self.update(status: .playing)
     }
     
     func pausePlayback() {
         self.audioPlayer?.pause()
-        self.status = .paused
+        self.update(status: .paused)
     }
     
     func stopPlayback() {
         self.audioPlayer?.stop()
-        self.status = .stopped
+        self.update(status: .stopped)
     }
 }
 

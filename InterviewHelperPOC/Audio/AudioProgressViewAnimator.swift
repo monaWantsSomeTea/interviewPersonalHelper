@@ -51,23 +51,29 @@ class AudioProgressViewAnimator: ObservableObject {
     }
     
     func updateAudioPlayerTimerImmediately() {
-        Task(priority: .high) { [weak self] in
-            guard let self else {
-                fatalError("Class object does not exist.")
-            }
-            
-            await MainActor.run {
-                self.currentTimeFormatted = AudioBox.format(time: self.audioBox.currentTimeForPlayer)
-                self.currentTime = self.audioBox.currentTimeForPlayer
-            }
-        }
+        self.updateCurrentTime()
     }
     
     func stopUpdateTimer() {
         self.updateTimer?.invalidate()
         self.updateTimer = nil
-        self.currentTimeFormatted = "00:00"
-        self.currentTime = 0.0
+        self.updateCurrentTime(reset: true)
         
+    }
+    
+    func updateCurrentTime(reset: Bool = false) {
+        Task { @MainActor [weak self] in
+            guard let self else {
+                fatalError("Class object does not exist.")
+            }
+            
+            if reset {
+                self.currentTimeFormatted = "00:00"
+                self.currentTime = 0.0
+            } else {
+                self.currentTimeFormatted = AudioBox.format(time: self.audioBox.currentTimeForPlayer)
+                self.currentTime = self.audioBox.currentTimeForPlayer
+            }
+        }
     }
 }
