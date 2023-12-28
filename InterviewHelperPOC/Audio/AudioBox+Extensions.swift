@@ -18,6 +18,13 @@ extension AudioBox {
         }
     }
     
+    func update(hasStoredAudio: Bool) {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.hasStoredAudio = hasStoredAudio
+        }
+    }
+    
     private func update(hasTemporaryAudioFile: Bool) {
         Task { @MainActor [weak self] in
             guard let self else { return }
@@ -41,7 +48,7 @@ extension AudioBox {
         // and Core data contains data for this Prompt item
         guard let identifier else {
             let url = self.getTemporaryURL(prompt: prompt)
-            self.hasStoredAudio = FileManager.default.fileExists(atPath: url.path())
+            self.update(hasStoredAudio: FileManager.default.fileExists(atPath: url.path()))
             return
         }
         
@@ -50,11 +57,11 @@ extension AudioBox {
         let savedFileURL = self.getURLWithinDocumentDirectory(with: identifier)
         
         if let data = fileManager.contents(atPath: unsavedFileURL.path()), !data.isEmpty {
-            self.hasStoredAudio = true
+            self.update(hasStoredAudio: true)
         } else if let savedFileURL, let data = fileManager.contents(atPath: savedFileURL.path()), !data.isEmpty {
-            self.hasStoredAudio = true
+            self.update(hasStoredAudio: true)
         } else {
-            self.hasStoredAudio = false
+            self.update(hasStoredAudio: false)
         }
     }
     
@@ -81,12 +88,12 @@ extension AudioBox {
             if FileManager.default.fileExists(atPath: url.path()) {
                 try self.deleteTemporaryAudioFileURL(url: url)
             } else {
-                self.hasStoredAudio = false
+                self.update(hasStoredAudio: false)
                 fatalError("URL to file is not found in the temporary directory.")
             }
             
             // No audio is stored when the identifier for the prompt item does not exisit.
-            self.hasStoredAudio = false
+            self.update(hasStoredAudio: false)
             return
         }
         
@@ -101,7 +108,7 @@ extension AudioBox {
         
         // No audio file stored on device.
         if let savedFileURL, !FileManager.default.fileExists(atPath: savedFileURL.path()) {
-            self.hasStoredAudio = false
+            self.update(hasStoredAudio: false)
         }
     }
     
@@ -130,7 +137,7 @@ extension AudioBox {
         }
         
         audioRecorder.stop()
-        self.hasStoredAudio = true
+        self.update(hasStoredAudio: true)
     }
     
     func play(identifier: UUID?, prompt: String) throws {

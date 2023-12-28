@@ -99,13 +99,12 @@ extension AudioBox {
 
 extension AudioBox: AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        self.status = .stopped
-        self.hasStoredAudio = flag
+        self.update(status: .stopped)
     }
 }
 
 extension AudioBox: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        self.status = .stopped
+        self.update(status: .stopped)
     }
 }
