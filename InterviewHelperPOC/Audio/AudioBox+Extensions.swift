@@ -140,8 +140,7 @@ extension AudioBox {
         self.update(hasStoredAudio: true)
     }
     
-    func play(identifier: UUID?, prompt: String) throws {
-
+    func setupAudioPlayer(identifier: UUID?, prompt: String) throws {
         let temporaryURL = self.getTemporaryURL(identifier: identifier, prompt: prompt)
         let documentURL = self.getURLWithinDocumentDirectory(with: identifier)
         
@@ -153,7 +152,9 @@ extension AudioBox {
         } else {
             fatalError("Can not play. Url to file is not valid.")
         }
-        
+    }
+    
+    func play() {
         guard let audioPlayer = self.audioPlayer else {
             fatalError("Audio player not found")
         }

@@ -55,6 +55,7 @@ struct PromptAndResponseView: View {
             .sheet(isPresented: self.$isPresentingNewRecordingView) {
                 CreateNewRecordingView(audioBox: self.audioBox,
                                        progressAnimator: self.progressAnimator,
+                                       promptItemViewModel: self.$question,
                                        isPresentingPlayRecordView: self.$isPresentingPlayRecordView,
                                        isPresentingNewRecordingView: self.$isPresentingNewRecordingView)
                     .presentationDetents([.fraction(0.2)])

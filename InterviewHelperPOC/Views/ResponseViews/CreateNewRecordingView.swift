@@ -11,6 +11,7 @@ struct CreateNewRecordingView: View {
     @ObservedObject var audioBox: AudioBox
     @ObservedObject var progressAnimator: AudioProgressViewAnimator
      
+    @Binding var promptItemViewModel: PromptItemViewModel
     @Binding var isPresentingPlayRecordView: Bool
     @Binding var isPresentingNewRecordingView: Bool
     
@@ -27,7 +28,14 @@ struct CreateNewRecordingView: View {
                 self.audioBox.stopRecording()
                 self.progressAnimator.stopUpdateTimer()
                 self.isPresentingNewRecordingView = false
-                self.isPresentingPlayRecordView = true
+                
+                do {
+                    try self.audioBox.setupAudioPlayer(identifier: self.promptItemViewModel.identifier,
+                                                       prompt: self.promptItemViewModel.prompt)
+                    self.isPresentingPlayRecordView = true
+                } catch {
+                    assertionFailure("Audio player could not be setup.")
+                }
             } label: {
                 Image(systemName: "stop.circle.fill")
                     .resizable()
@@ -48,6 +56,7 @@ struct CreateNewRecordingView_Previews: PreviewProvider {
         let audioBox = AudioBox()
         CreateNewRecordingView(audioBox: audioBox,
                                progressAnimator: AudioProgressViewAnimator(audioBox: audioBox),
+                               promptItemViewModel: .constant(PromptItemViewModel(model: TopInterviewQuestions().questions[0] as! GenericPromptItem)),
                                isPresentingPlayRecordView: .constant(true),
                                isPresentingNewRecordingView: .constant(true))
     }
