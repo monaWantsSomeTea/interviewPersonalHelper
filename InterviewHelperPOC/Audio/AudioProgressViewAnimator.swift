@@ -64,7 +64,8 @@ class AudioProgressViewAnimator: ObservableObject {
     func updateCurrentTime(reset: Bool = false) {
         Task { @MainActor [weak self] in
             guard let self else {
-                fatalError("Class object does not exist.")
+                assertionFailure("Class object does not exist.")
+                return
             }
             
             if reset {

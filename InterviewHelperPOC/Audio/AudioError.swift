@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AudioError {
+enum AudioError: Error {
     case none
     case failedToSave
     case failedToDelete

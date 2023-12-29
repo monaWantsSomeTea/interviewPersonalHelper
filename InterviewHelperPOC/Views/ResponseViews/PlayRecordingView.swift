@@ -177,7 +177,11 @@ extension PlayRecordingView {
             try self.audioBox.deleteAudio(identifier: self.promptItemViewModel.identifier,
                                           prompt: self.promptItemViewModel.prompt)
         } catch {
-            self.audioError = .failedToDelete
+            if let error = error as? AudioError {
+                self.audioError = error
+            } else {
+                self.audioError = .failedToDelete
+            }
         }
     }
     
@@ -186,7 +190,11 @@ extension PlayRecordingView {
             let identifier = try self.audioBox.writeAudioToDocumentsDirectory(for: promptItem)
             try self.saveToCoreData(for: promptItem, with: identifier)
         } catch {
-            self.audioError = .failedToSave
+            if let error = error as? AudioError {
+                self.audioError = error
+            } else {
+                self.audioError = .failedToSave
+            }
         }
     }
 
@@ -213,7 +221,7 @@ extension PlayRecordingView {
             newPromptItem.originalId = String(topInterviewQuestion.id)
             newPromptItem.prompt = topInterviewQuestion.prompt
         default:
-            fatalError("Unsupported type")
+            throw AudioError.failedToSave
         }
 
         do {
@@ -222,9 +230,9 @@ extension PlayRecordingView {
             }
             
             try self.viewContext.save()
-        } catch let error as NSError {
+        } catch {
             self.viewContext.delete(newPromptItem)
-            throw error
+            throw AudioError.failedToSave
         }
     }
 }

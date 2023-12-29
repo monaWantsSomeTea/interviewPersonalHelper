@@ -76,7 +76,8 @@ extension AudioBox {
             try data.write(to: url, options: [.atomic])
             try self.deleteTemporaryAudioFileURL(url: urlForTemporaryDirectoryPath)
         } else {
-            fatalError("File url is not found in the temporary directory.")
+            assertionFailure("File url is not found in the temporary directory.")
+            throw AudioError.failedToSave
         }
         
         return identifier
@@ -89,7 +90,8 @@ extension AudioBox {
                 try self.deleteTemporaryAudioFileURL(url: url)
             } else {
                 self.update(hasStoredAudio: false)
-                fatalError("URL to file is not found in the temporary directory.")
+                assertionFailure("URL to file is not found in the temporary directory.")
+                throw AudioError.failedToDelete
             }
             
             // No audio is stored when the identifier for the prompt item does not exisit.
@@ -124,7 +126,8 @@ extension AudioBox {
         try self.setupRecorder(promptItemIdentifier: promptItemIdentifier, prompt: prompt)
         self.update(status: .recording)
         guard let audioRecorder = self.audioRecorder else {
-            fatalError("No recorder was found.")
+            assertionFailure("No recorder was found.")
+            throw AudioError.genericError
         }
         
         audioRecorder.record()
@@ -150,7 +153,8 @@ extension AudioBox {
         } else if let documentURL, FileManager.default.fileExists(atPath: documentURL.path()) {
             self.audioPlayer = try AVAudioPlayer(contentsOf: documentURL)
         } else {
-            fatalError("Can not play. Url to file is not valid.")
+            assertionFailure("Can not play. Url to file is not valid.")
+            throw AudioError.genericError
         }
     }
     
