@@ -144,8 +144,19 @@ extension PlayRecordingView {
         case .paused:
             self.audioBox.resumePlayback()
         case .stopped:
-            self.audioBox.play()
-            self.progressAnimator.startUpdateLoop()
+            do {
+                self.progressAnimator.stopUpdateTimer()
+                try self.audioBox.setupAudioPlayer(identifier: self.promptItemViewModel.identifier,
+                                                   prompt: self.promptItemViewModel.prompt)
+                self.audioBox.play()
+                self.progressAnimator.startUpdateLoop()
+            } catch {
+                if let error = error as? AudioError {
+                    self.audioError = error
+                } else {
+                    self.audioError = .genericError
+                }
+            }
         case .recording:
             fatalError("Recording is in session.")
             break
