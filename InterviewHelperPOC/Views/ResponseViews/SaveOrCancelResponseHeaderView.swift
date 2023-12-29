@@ -20,6 +20,9 @@ struct SaveOrCancelResponseHeaderView: View {
     /// Contains the prompt item data
     @Binding var question: PromptItemViewModel
     
+    /// Whether to show the error alert when the response fails to save to CoreData.
+    @State var showErrorMessage: Bool = false
+    
     var body: some View {
         HStack {
             Button(action: self.cancel) {
@@ -35,7 +38,7 @@ struct SaveOrCancelResponseHeaderView: View {
 
             Spacer()
 
-            Button(action: { self.save(self.$inputResponse, to: self.$question) }) {
+            Button(action: { self.save(self.$inputResponse, to: self.question) }) {
                 Text("Save")
                     .foregroundColor(.black)
                     .padding([.horizontal])
@@ -46,15 +49,21 @@ struct SaveOrCancelResponseHeaderView: View {
                     }
             }
         }
+        .alert(isPresented: self.$showErrorMessage) {
+            Alert(title: Text("Something went wrong"),
+                  message: Text("Notes were not saved. Please try again later."),
+                  dismissButton: .default(Text("Dismiss")))
+        }
     }
 }
 
 extension SaveOrCancelResponseHeaderView {
     /// Save to Core Data
-    private func save(_ inputResponse: Binding<String>, to question: Binding<PromptItemViewModel>) {
+    private func save(_ inputResponse: Binding<String>, to question: PromptItemViewModel) {
         let newPromptItem = PromptItem(context: self.viewContext)
+        var oldPromptItem: PromptItem?
         
-        switch $question.model.wrappedValue {
+        switch question.model {
         case let promptItem as PromptItem:
             // The old prompt item properties are assigned to the new prompt item.
             // Then we delete the old prompt item.
@@ -64,7 +73,7 @@ extension SaveOrCancelResponseHeaderView {
             newPromptItem.originalId = promptItem.originalId
             newPromptItem.prompt = promptItem.prompt
             
-            self.viewContext.delete(promptItem)
+            oldPromptItem = promptItem
         case let topInterviewQuestion as TopInterviewQuestion:
             newPromptItem.identifier = UUID()
             newPromptItem.originialCategory = kTopInterviewQuestionCategory
@@ -77,10 +86,14 @@ extension SaveOrCancelResponseHeaderView {
         newPromptItem.response = inputResponse.wrappedValue
 
         do {
+            if let oldPromptItem {
+                self.viewContext.delete(oldPromptItem)
+            }
+            
             try self.viewContext.save()
-        } catch let error as NSError {
-            // TODO: Make a toast or alert
-            print("Could not save. \(error), \(error.userInfo)")
+        } catch {
+            self.showErrorMessage = true
+            self.viewContext.delete(newPromptItem)
         }
     }
     
