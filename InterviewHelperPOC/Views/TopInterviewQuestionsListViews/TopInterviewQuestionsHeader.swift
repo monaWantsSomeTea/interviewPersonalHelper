@@ -9,7 +9,7 @@ import SwiftUI
 
 private let kHeaderLabelPadding: CGFloat = 16
 
-struct CommonQuestionsHeader: View {
+struct TopInterviewQuestionsHeader: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -22,8 +22,8 @@ struct CommonQuestionsHeader: View {
     }
 }
 
-struct CommonQuestionsHeader_Previews: PreviewProvider {
+struct TopInterviewQuestionsHeader_Previews: PreviewProvider {
     static var previews: some View {
-        CommonQuestionsHeader()
+        TopInterviewQuestionsHeader()
     }
 }

@@ -23,7 +23,6 @@ struct UserResponseView: View {
                 .fontWeight(.semibold)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.leading)
-                .disabled(true)
         }
     }
     
