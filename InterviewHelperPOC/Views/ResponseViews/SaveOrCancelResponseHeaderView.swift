@@ -17,6 +17,8 @@ struct SaveOrCancelResponseHeaderView: View {
 
     /// Input from the user
     @Binding var inputResponse: String
+    
+    @FocusState var textFieldFocused: Bool
     /// Contains the prompt item data
     @Binding var question: PromptItemViewModel
     
@@ -27,12 +29,12 @@ struct SaveOrCancelResponseHeaderView: View {
         HStack {
             Button(action: self.cancel) {
                 Text("Cancel")
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .padding([.horizontal])
                     .padding([.vertical], kCancelLabelVerticalViewPadding)
                     .overlay {
                         Capsule(style: .continuous)
-                            .stroke(Color.black)
+                            .stroke(Color.primary)
                     }
             }
 
@@ -40,12 +42,12 @@ struct SaveOrCancelResponseHeaderView: View {
 
             Button(action: { self.save(self.$inputResponse, to: self.question) }) {
                 Text("Save")
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .padding([.horizontal])
                     .padding([.vertical], kSaveLabelVerticalViewPadding)
                     .overlay {
                         Capsule(style: .continuous)
-                            .stroke(Color.black)
+                            .stroke(Color.primary)
                     }
             }
         }
@@ -99,6 +101,7 @@ extension SaveOrCancelResponseHeaderView {
     
     private func cancel() {
         self.inputResponse = self.question.response
+        self.textFieldFocused = false
     }
 }
 

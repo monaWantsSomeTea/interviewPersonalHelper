@@ -27,12 +27,12 @@ struct ResponseRecordingActionsView: View {
             Button(action: self.playAudio) {
                 Text("Play Recording")
                     .fontWeight(.medium)
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .padding([.horizontal])
                     .padding([.vertical], kPlayRecordingLabelVerticalViewPadding)
                     .overlay {
                         Capsule(style: .continuous)
-                            .stroke(Color.black)
+                            .stroke(Color.primary)
                     }
             }
             .opacity(self.audioBox.hasStoredAudio ? 1 : 0.3)

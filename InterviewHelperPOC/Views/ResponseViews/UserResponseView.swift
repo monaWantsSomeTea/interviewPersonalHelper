@@ -21,9 +21,8 @@ struct UserResponseView: View {
             TextEditor(text: self.$question.response)
                 .shadow(color: .brown, radius: kResponseInputViewShadowRadius)
                 .fontWeight(.semibold)
-                .foregroundColor(Color(.darkGray))
+                .foregroundColor(.secondary)
                 .multilineTextAlignment(.leading)
-                .disabled(true)
         }
     }
     

@@ -64,7 +64,7 @@ struct PlayRecordingView: View {
                     } label: {
                         Image(systemName: "backward.circle")
                             .resizable()
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .frame(width: 36, height: 36)
                     }
                     
@@ -73,7 +73,7 @@ struct PlayRecordingView: View {
                     } label: {
                         Image(systemName: self.playOrPauseActionImageName)
                             .resizable()
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .frame(width: 32, height: 32)
                     }
                     
@@ -84,7 +84,7 @@ struct PlayRecordingView: View {
                     } label: {
                         Image(systemName: "forward.circle")
                             .resizable()
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .frame(width: 36, height: 36)
                     }
                     
