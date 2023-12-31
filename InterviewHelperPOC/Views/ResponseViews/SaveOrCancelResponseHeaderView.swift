@@ -17,6 +17,8 @@ struct SaveOrCancelResponseHeaderView: View {
 
     /// Input from the user
     @Binding var inputResponse: String
+    
+    @FocusState var textFieldFocused: Bool
     /// Contains the prompt item data
     @Binding var question: PromptItemViewModel
     
@@ -99,6 +101,7 @@ extension SaveOrCancelResponseHeaderView {
     
     private func cancel() {
         self.inputResponse = self.question.response
+        self.textFieldFocused = false
     }
 }
 

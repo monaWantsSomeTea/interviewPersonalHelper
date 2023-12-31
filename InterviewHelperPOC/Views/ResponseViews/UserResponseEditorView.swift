@@ -15,6 +15,7 @@ struct UserResponseEditorView: View {
     
     @State var inputResponse: String
     @Binding var question: PromptItemViewModel
+    @FocusState var focused: Bool
     
     var body: some View {
         VStack {
@@ -23,14 +24,18 @@ struct UserResponseEditorView: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
+            Divider()
+            
             TextEditor(text: self.$inputResponse)
-                .shadow(color: .brown, radius: kResponseTextInputViewShadowRadius)
                 .fontWeight(.semibold)
-                .foregroundColor(Color(.darkGray))
+                .foregroundColor(.secondary)
+                .focused(self.$focused)
             
             Spacer(minLength: kPaddingBetweenResponseInputAndActionsView)
             
-            SaveOrCancelResponseHeaderView(inputResponse: self.$inputResponse, question: self.$question)
+            SaveOrCancelResponseHeaderView(inputResponse: self.$inputResponse,
+                                           textFieldFocused: self._focused,
+                                           question: self.$question)
                 .environment(\.managedObjectContext, viewContext)
         }
         .padding()
