@@ -16,7 +16,7 @@ struct QuestionCard: View {
     var question: PromptItemViewModel
     var body: some View {
             RoundedRectangle(cornerRadius: kQuestionCardCornerRadius)
-                .foregroundColor(.white)
+            .foregroundColor(Color(.systemBackground))
                 .shadow(color: .brown, radius: kQuestionCardShadowRadius)
                 .frame(minWidth: kQuestionCardMinWidth)
                 .frame(minHeight: kQuestionCardMinHeight)

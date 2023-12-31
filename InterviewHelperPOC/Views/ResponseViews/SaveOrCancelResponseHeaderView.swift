@@ -27,12 +27,12 @@ struct SaveOrCancelResponseHeaderView: View {
         HStack {
             Button(action: self.cancel) {
                 Text("Cancel")
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .padding([.horizontal])
                     .padding([.vertical], kCancelLabelVerticalViewPadding)
                     .overlay {
                         Capsule(style: .continuous)
-                            .stroke(Color.black)
+                            .stroke(Color.primary)
                     }
             }
 
@@ -40,12 +40,12 @@ struct SaveOrCancelResponseHeaderView: View {
 
             Button(action: { self.save(self.$inputResponse, to: self.question) }) {
                 Text("Save")
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .padding([.horizontal])
                     .padding([.vertical], kSaveLabelVerticalViewPadding)
                     .overlay {
                         Capsule(style: .continuous)
-                            .stroke(Color.black)
+                            .stroke(Color.primary)
                     }
             }
         }
