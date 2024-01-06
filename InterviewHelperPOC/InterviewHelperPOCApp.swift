@@ -13,7 +13,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         let session = AVAudioSession.sharedInstance()
         do {
-            try session.setCategory(.playAndRecord, options: .defaultToSpeaker)
+            try session.setCategory(.playAndRecord, options: [.defaultToSpeaker, .allowBluetooth])
             try session.setActive(true)
         } catch {
             fatalError("AVAudioSession configuration error: \(error.localizedDescription)")
